@@ -902,15 +902,21 @@ Explanation: The longest increasing subsequence is [2,3,7,101], therefore the le
 ### Python Solution
 **分析：** 非常精彩的题目，常规动态规划解法是 O(n^2) 的时间复杂度，但是用二分搜索可以减少到 O(nlgn)，尤其是迭代更新的部分需要好好品味下。
 
-```python
-class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        dp = [1] * len(nums)
-        for i in range(1, len(nums)):
-            for j in range(1, i+1):
-                if nums[i] > nums[i-j]:
-                    dp[i] = max(dp[i], dp[i-j]+1)
-        return max(dp) if dp else 0
+```cpp
+class Solution {
+public:
+    int numSquares(int n) {
+        int dp[n+1];
+
+        for (int i = 0; i <= n; i++) {
+            dp[i] = i;
+            for (int j = 1; j * j <= i; j++) {
+                dp[i] = min(dp[i], dp[i-j*j] + 1);
+            }
+        }
+        return dp[n];
+    }
+};
 ```
 
 **O(nlgn)的解法**
@@ -974,18 +980,22 @@ Explanation: There is no such common subsequence, so the result is 0.
 class Solution {
 public:
     int longestCommonSubsequence(string text1, string text2) {
-        int m = text1.size(), n = text2.size();
-        vector<int> dp(n + 1, 0);
+        int m = text1.length(), n = text2.length();
+
+        int dp[n+1], pre, cur;
+        memset(dp, 0, sizeof(dp));
 
         for (int i = 0; i < m; i++) {
-            vector<int> tmp(n + 1, 0);
+            pre = dp[0];
             for (int j = 0; j < n; j++) {
-                if (text1[i] == text2[j])
-                    tmp[j + 1] = dp[j] + 1;
-                else
-                    tmp[j + 1] = max(tmp[j], dp[j + 1]);
+                cur = dp[j+1];
+                if (text1[i] == text2[j]) {
+                    dp[j+1] = pre + 1;
+                } else {
+                    dp[j+1] = max(dp[j], dp[j+1]);
+                }
+                pre = cur;
             }
-            dp = tmp;
         }
         return dp[n];
     }
@@ -1015,40 +1025,34 @@ Output: false
 ---
 
 ### Python Solution
-**分析：** 动态规划？第一种解法是带备忘录的递归，第二章一维动态规划。
+**分析：** 一维动态规划。
 
-```python
-class Solution:
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        memo = {}
-        def check(p1, p2, p3):
-            if (p1, p2) in memo:
-                return memo[(p1, p2)]
-            if p3 == len(s3):
-                return p1 == len(s1) and p2 == len(s2)
-            memo[(p1, p2)] = False
-            if p1 < len(s1) and s1[p1]==s3[p3]:
-                memo[(p1, p2)] |= check(p1+1, p2, p3+1)
-            if p2 < len(s2) and s2[p2]==s3[p3]:
-                memo[(p1, p2)] |= check(p1, p2+1, p3+1)
-            return memo[(p1, p2)]
-        return check(0, 0, 0)
-```
+```cpp
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        int m = s1.length(), n = s2.length();
+        if (m + n != s3.length()) return false;
 
-```python
-class Solution: # 动态规划解法
-    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
-        r, c, l= len(s1), len(s2), len(s3)
-        if r+c != l:
-            return False
-        dp = [True for _ in range(c+1)]
-        for j in range(1, c+1):
-            dp[j] = dp[j-1] and s2[j-1] == s3[j-1]
-        for i in range(1, r+1):
-            dp[0] = (dp[0] and s1[i-1] == s3[i-1])
-            for j in range(1, c+1):
-                dp[j] = (dp[j] and s1[i-1] == s3[i-1+j]) or (dp[j-1] and s2[j-1] == s3[i-1+j])
-        return dp[-1]
+        bool dp[n+1];
+
+        for (int i = 0; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (i == 0 && j == 0) {
+                    dp[j] = true;
+                } else if (i == 0) {
+                    dp[j] = dp[j-1] && s2[j-1] == s3[j-1];
+                } else if (j == 0) {
+                    dp[j] = dp[j] && s1[i-1] == s3[i-1];
+                } else {
+                    dp[j] = dp[j-1] && s2[j-1] == s3[i+j-1] \
+                         || dp[j] && s1[i-1] == s3[i+j-1];
+                }
+            }
+        }
+        return dp[n];
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1288,22 +1292,35 @@ Explanation: ".*" means "zero or more (*) of any character (.)".
 ### Python Solution
 **分析：** 一道困难程度的题，判断条件必须要分析好，最好纸上记下推一下，不然很容易乱。
 
-```python
-class Solution(object):
-    def isMatch(self, s, p):
-        dp = [[False] * (len(p) + 1) for _ in range(len(s) + 1)]
-        dp[0][0] = True
-        for j in range(1, len(p) + 1):
-            if p[j - 1] == "*":
-                dp[0][j] = dp[0][j - 2]
+```cpp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m = s.length(), n = p.length();
 
-        for i in range(1, len(s) + 1):
-            for j in range(1, len(p) + 1):
-                if p[j - 1] != "*":  # 上一位可以到达并且 可以匹配。
-                    dp[i][j] = dp[i - 1][j - 1] and (s[i - 1] == p[j - 1] or p[j - 1] == ".")
-                else:                # 忽略掉 A× 或者 重复 A
-                    dp[i][j] = dp[i][j - 2] or dp[i - 1][j] and (p[j - 2] == s[i - 1] or p[j - 2] == ".")
-        return dp[-1][-1]
+        bool dp[n+1], pre, cur;
+        dp[0] = true;
+        for (int j = 0; j < n; j++) {
+            dp[j+1] = p[j] == '*' ? dp[j-1] : false;
+        }
+
+        for (int i = 0; i < m; i++) {
+            pre = dp[0];
+            dp[0] = false;
+            for (int j = 0; j < n; j++) {
+                cur = dp[j+1];
+                if (p[j] == '*') {
+                    dp[j+1] = dp[j-1]
+                           || dp[j+1] && (p[j-1] == s[i] || p[j-1] == '.');
+                } else {
+                    dp[j+1] = pre && (p[j] == s[i] || p[j] == '.');
+                }
+                pre = cur;
+            }
+        }
+        return dp[n];
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1361,44 +1378,34 @@ Output: false
 ### Python Solution
 **分析：** 普通做法 二维到一维，然后优化。
 
-```python
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        dp = [[False] * (len(p)+1) for _ in range(len(s)+1)]
-        dp[0][0] = True
-        for j in range(1, len(p)+1):
-            if p[j-1] != '*':
-                break
-            dp[0][j] = True
-        for i in range(1, len(s)+1):
-            for j in range(1, len(p)+1):
-                if p[j-1] != '*':
-                    dp[i][j] = dp[i-1][j-1] and p[j-1] in (s[i-1], '?')
-                else:
-                    dp[i][j] = dp[i-1][j] or dp[i][j-1]
-        return dp[-1][-1]
-```
+```cpp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m = s.length(), n = p.length();
 
-**一维**
+        bool dp[n+1], pre, cur;
+        dp[0] = true;
+        for (int j = 0; j < n; j++) {
+            dp[j+1] = p[j] == '*' ? dp[j] : false;
+        }
 
-```python
-class Solution:
-    def isMatch(self, s: str, p: str) -> bool:
-        dp = [False] * (len(p)+1)
-        dp[0] = True
-        for j in range(1, len(p)+1):
-            if p[j-1] != '*':
-                break
-            dp[j] = True
-        for i in range(1, len(s)+1):
-            tmp = [False] * (len(p)+1)
-            for j in range(1, len(p)+1):
-                if p[j-1] != '*':
-                    tmp[j] = dp[j-1] and p[j-1] in (s[i-1], '?')
-                else:
-                    tmp[j] = dp[j] or tmp[j-1]
-            dp = tmp
-        return dp[-1]
+        for (int i = 0; i < m; i++) {
+            pre = dp[0];
+            dp[0] = false;
+            for (int j = 0; j < n; j++) {
+                cur = dp[j+1];
+                if (p[j] == '*') {
+                    dp[j+1] = dp[j] || dp[j+1];
+                } else {
+                    dp[j+1] = pre && (p[j] == s[i] || p[j] == '?');
+                }
+                pre = cur;
+            }
+        }
+        return dp[n];
+    }
+};
 ```
 
 [返回目录](#00)
