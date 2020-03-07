@@ -171,20 +171,26 @@ public:
 输入一个链表，按链表从尾到头的顺序返回一个ArrayList。
 #### 解法：
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    # 返回从尾部到头部的列表值序列，例如[1,2,3]
-    def printListFromTailToHead(self, head):
-        res = []
-        while head:
-            res.append(head.val)
-            head = head.next
-        return res[::-1]
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> printListReversingly(ListNode* head) {
+        vector<int> res;
+        while (head) {
+            res.push_back(head->val);
+            head = head->next;
+        }
+        return vector<int>(res.rbegin(), res.rend());
+    }
+};
 ```
 
 **还可以递归实现：**
