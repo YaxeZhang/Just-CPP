@@ -93,10 +93,9 @@ class Solution {  // 有趣的解法
 public:
     ListNode* reverseList(ListNode* head) {
         if (!head) return head;
-        ListNode **b = &head, **a = &(*b)->next;
-        for (;*a;swap(*b, *a))
-            swap(*b, (*a)->next);
-        return *b;
+        for (auto **a = &head, **b = &head->next; *b; swap(*a, *b))
+            swap(*a, (*b)->next);
+        return head;
     }
 };
 ```
