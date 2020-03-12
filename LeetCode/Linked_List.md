@@ -88,6 +88,19 @@ public:
 };
 ```
 
+```cpp
+class Solution {  // 有趣的解法
+public:
+    ListNode* reverseList(ListNode* head) {
+        if (!head) return head;
+        ListNode **b = &head, **a = &(*b)->next;
+        for (;*a;swap(*b, *a))
+            swap(*b, (*a)->next);
+        return *b;
+    }
+};
+```
+
 [返回目录](#00)
 
 ## 141  Linked List Cycle
