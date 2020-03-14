@@ -389,51 +389,47 @@ Output: 1->4->3->2->5->NULL
 ### Python Solution
 **分析：** 思路比较简单，可以参考[Reverse Linked List ](https://blog.csdn.net/Y_axe/article/details/99718252) 的解法，找到要反转的头和尾，进行反转操作即可
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
-        dummy = post = ListNode(0)
-        pre = head
-        post.next = head
-        while m - 1:
-            post = pre
-            pre = pre.next
-            m -= 1
-            n -= 1
-        while n - 1:
-            pre = pre.next
-            n -= 1
-        ret = res = pre.next
-        ans = post.next
-        while ans != ret:
-            tmp = ans.next
-            ans.next = res
-            res = ans
-            ans = tmp
-        post.next = res
-        return dummy.next
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode **pre = &head, **post;
+        for (; m--; n--)
+            pre = &(*(post=pre))->next;
+        for (; n--; swap(*pre, *post))
+            swap(*post, (*pre)->next);
+        return head;
+    }
+};
 ```
 
-```python
-class Solution:
-    def reverseBetween(self, head: ListNode, m: int, n: int) -> ListNode:
-        pre = head
-        dummy = post = ListNode(0)
-        post.next = head
-        for i in range(m-1):
-            post = pre
-            pre = pre.next
-        for i in range(n-m):
-            cur = pre.next
-            pre.next = cur.next
-            cur.next = post.next
-            post.next = cur
-        return dummy.next
+```cpp
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode *pre = head, *dummy = new ListNode(0), *post = dummy, *cur;
+        post -> next = head;
+        for (int i = 1; i < m; i++) {
+            post = pre;
+            pre = pre->next;
+        }
+        for (int i = 0; i < (n-m); i++) {
+            cur = pre->next;
+            pre->next = cur->next;
+            cur->next = post->next;
+            post->next = cur;
+        }
+        return dummy->next;
+    }
+};
 ```
 
 [返回目录](#00)
