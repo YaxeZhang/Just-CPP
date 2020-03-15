@@ -183,18 +183,16 @@ Since the list has two middle nodes with values 3 and 4, we return the second on
 ### Python Solution
 **分析：**
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def middleNode(self, head: ListNode) -> ListNode:
-        pre = post =head
-        while pre and pre.next:
-            post, pre = post.next, pre.next.next
-        return post
+```cpp
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode *fast = head, *slow = head;
+        while (fast && fast->next)
+            fast = fast->next->next, slow = slow->next;
+        return slow;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -225,34 +223,20 @@ Given 1->2->3->4, you should return the list as 2->1->4->3.
 3. 把当前结点的下个结点的 next 指向下下下个结点
 这样就完成了下两个结点的交换，把当前结点走到下下个结点即可。但是问题在于怎么区分 比如：当前结点是 tmp ，当前结点的下个结点是 tmp.next ，当前结点的下下个结点和当前结点的下个结点的 next 同样都是 tmp.next.next ，就产生了混淆歧义，于是分开他们就好了
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def swapPairs(self, head: ListNode) -> ListNode:
-        dummy = tmp = ListNode(0)
-        tmp.next = head
-        while tmp.next and tmp.next.next:
-            post = tmp.next
-            pre = post.next
-            tmp.next, pre.next, post.next = pre, post, pre.next
-            tmp = post
-        return dummy.next
-```
-
-```python
-class Solution:
-    def swapPairs(self, head: ListNode) -> ListNode:
-        tmp, tmp.next = self, head
-        while tmp.next and tmp.next.next:
-            post = tmp.next
-            pre = post.next
-            tmp.next, pre.next, post.next = pre, post, pre.next
-            tmp = post
-        return self.next
+```cpp
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        ListNode **pp = &head, *a, *b;
+        while ((a = *pp) && (b = a->next)) {
+            a->next = b->next;
+            b->next = a;
+            *pp = b;
+            pp = &(a->next);
+        }
+        return head;
+    }
+};
 ```
 
 [返回目录](#00)
