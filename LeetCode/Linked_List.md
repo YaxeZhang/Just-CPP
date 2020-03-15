@@ -141,62 +141,21 @@ Explanation: There is no cycle in the linked list.
 ### Python Solution
 **分析：**
 
-```python
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def hasCycle(self, head):
-        if not head or not head.next:
-            return False
-        slow, fast = head, head.next
-        while slow != fast:
-            if not fast or not fast.next:
-                return False
-            slow, fast = slow.next, fast.next.next
-        return True
-```
-
-**Pythonic Solution:**
-
-```Python
-class Solution(object):
-    def hasCycle(self, head):
-        try:
-            slow, fast = head, head.next
-            while slow is not fast:
-                slow, fast = slow.next, fast.next.next
-            return True
-        except:
-            return False
-```
-
 **更简洁！！**
 
-```Python
-class Solution(object):
-    def hasCycle(self, head):
-        fast = slow = head
-        while fast and fast.next:
-            fast, slow = fast.next.next, slow.next
-            if fast == slow:
-                return True
-        return False
-```
-
-**破坏型解法，不推荐**
-
-```Python
-class Solution(object):
-    def hasCycle(self, head):
-        while head:
-            if head.val == None:
-                return True
-            head.val = None
-            head = head.next
-        return False
+```cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode *pre = head, *post = head;
+        while (pre && pre->next) {
+            pre = pre->next->next;
+            post = post->next;
+            if (pre == post) return true;
+        }
+        return false;
+    }
+};
 ```
 
 [返回目录](#00)
