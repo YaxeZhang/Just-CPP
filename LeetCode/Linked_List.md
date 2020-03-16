@@ -551,23 +551,36 @@ Output: 1->2->3->4->5
 ### Python Solution
 **分析：**
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+```cpp
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode *dummy = new ListNode(0), *tmp = dummy;
+        dummy->next = head;
+        while (head) {
+            if (head->val == val)
+                tmp->next = head->next;
+            else
+                tmp = tmp->next;
+            head = head->next;
+        }
+        return dummy->next;
+    }
+};
+```
 
-class Solution:
-    def removeElements(self, head: ListNode, val: int) -> ListNode:
-        dummy = pre = ListNode(0)
-        pre.next = head
-        while head:
-            if head.val == val:
-                pre.next = head.next
-            else:
-                pre = pre.next
-            head = head.next
-        return dummy.next
+```cpp
+class Solution {
+public:
+    ListNode* removeElements(ListNode* head, int val) {
+        ListNode **pp = &head;
+        while (*pp) {
+            if ((*pp)->val == val) *pp = (*pp)->next;
+            else pp = &(*pp)->next;
+        }
+        return head;
+    }
+};
 ```
 
 [返回目录](#00)
