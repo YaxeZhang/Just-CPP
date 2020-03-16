@@ -270,41 +270,20 @@ Output: 2->3->6->7->1->5->4->NULL
 ### Python Solution
 **分析：** 将链表分成奇偶两条然后进行拼接即可，重点是边界判断
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def oddEvenList(self, head: ListNode) -> ListNode:
-        if not head:
-            return None
-        odd, even = head, head.next
-        eventmp = even
-        while even and even.next:
-            odd.next = even.next
-            odd = odd.next
-            even.next = odd.next
-            even = even.next
-        odd.next = eventmp
-        return head
-```
-
-**Pythonic Solution:**
-
-```python
-class Solution:
-    def oddEvenList(self, head: ListNode) -> ListNode:
-        if not head:
-            return None
-        odd = head
-        even = evenHead = odd.next
-        while even and even.next:
-            odd.next = odd = even.next
-            even.next = even = odd.next
-        odd.next = evenHead
-        return head
+```cpp
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head) return head;
+        ListNode *odd = head, *even = head->next, *ehd = even;
+        while (even && even->next) {
+            odd = odd->next = even->next;
+            even = even->next = odd->next;
+        }
+        odd->next = ehd;
+        return head;
+    }
+};
 ```
 
 [返回目录](#00)
