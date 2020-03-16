@@ -404,20 +404,26 @@ Explanation: You are given the third node with value 1, the linked list should b
 ### Python Solution
 **分析：** 有点蠢的题。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+```cpp
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        *node = *node->next;
+    }
+};
+```
 
-class Solution:
-    def deleteNode(self, node):
-        """
-        :type node: ListNode
-        :rtype: void Do not return anything, modify node in-place instead.
-        """
-        node.val = node.next.val
-        node.next = node.next.next
+**better one**
+
+```cpp
+class Solution {
+public:
+    void deleteNode(ListNode* node) {
+        auto next = node->next;
+        *node = *next;
+        delete next;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1055,7 +1061,8 @@ Explanation: There is a cycle in the linked list, where tail connects to the fir
 ```cpp
 class Solution {
 public:
-    ListNode *detectCycle(ListNode *head) {
+    ListNode *detectCycle(ListNode *head) {        
+        if (!head || !head->next) return NULL;
         ListNode *fast = head, *slow = head;
         while (fast && fast->next) {
             fast = fast->next->next, slow = slow->next;
