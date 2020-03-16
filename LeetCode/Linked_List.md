@@ -1052,25 +1052,23 @@ Explanation: There is a cycle in the linked list, where tail connects to the fir
 ### Pythonic Solution
 **分析：** 快慢指针找到相交的那点后，一个从那个点出发另一个从头出发，相遇的点既是环的入口
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def detectCycle(self, head: ListNode) -> ListNode:
-        fast = slow = head
-        while fast and fast.next:
-            fast = fast.next.next
-            slow = slow.next
-            if fast == slow:
-                slow = head
-                while fast != slow:
-                    fast = fast.next
-                    slow = slow.next
-                return fast
-        return None
+```cpp
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode *fast = head, *slow = head;
+        while (fast && fast->next) {
+            fast = fast->next->next, slow = slow->next;
+            if (fast == slow) {
+                fast = head;
+                while (fast != slow)
+                    fast = fast->next, slow = slow->next;
+                return fast;
+            }
+        }
+        return NULL;
+    }
+};
 ```
 
 [返回目录](#00)
