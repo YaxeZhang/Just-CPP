@@ -570,25 +570,26 @@ Output: 2->3
 ### Python Solution
 **分析：**
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def deleteDuplicates(self, head: ListNode) -> ListNode:
-        dummy = pre = ListNode(0)
-        pre.next = head
-        while head and head.next:
-            if head.val == head.next.val:
-                while head and head.next and head.val == head.next.val:
-                    head = head.next
-                pre.next = head.next
-            else:
-                pre = pre.next
-            head = head.next
-        return dummy.next
+```cpp
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        ListNode *dummy = new ListNode(0), *tmp = dummy;
+        dummy->next = head;
+        while (head && head->next) {
+            if (head->val == head->next->val) {
+                while (head->next && head->val == head->next->val) {
+                    auto del = head;
+                    head = del->next;
+                    delete del;
+                }
+                tmp->next = head->next;
+            } else tmp = tmp->next;
+            head = head->next;
+        }
+        return dummy->next;
+    }
+};
 ```
 
 [返回目录](#00)
