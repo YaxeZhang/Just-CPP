@@ -845,25 +845,37 @@ Output: 1->1->2->3->4->4
 ### Python Solution
 **分析：** 进行比较哪个值小取哪个，然后被取值的往前走一步，没有比较之后把多的补到后面即可。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+```cpp
+class Solution {   // 迭代法
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode *dummy = new ListNode(0), *tmp = dummy;
+        while (l1 && l2) {
+            if (l1->val <= l2->val)
+                tmp->next = l1, l1 = l1->next;
+            else
+                tmp->next = l2, l2 = l2->next;
+            tmp = tmp->next;
+        }
+        tmp->next = l1 ? l1 : l2;
+        return dummy->next;
+    }
+};
+```
 
-class Solution:
-    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
-        dummy = tmp = ListNode(0)
-        while l1 and l2:
-            if l1.val <= l2.val:
-                tmp.next = l1
-                l1 = l1.next
-            else:
-                tmp.next = l2
-                l2 = l2.next
-            tmp = tmp.next
-        tmp.next = l1 or l2
-        return dummy.next
+```cpp
+class Solution {   // 递归法
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        if (!l1 || !l2) return l1 ? l1 : l2;
+        ListNode *node;
+        if (l1->val <= l2->val)
+            node = l1, l1->next = mergeTwoLists(l1->next, l2);
+        else
+            node = l2, l2->next = mergeTwoLists(l1, l2->next);
+        return node;
+    }
+};
 ```
 
 [返回目录](#00)
