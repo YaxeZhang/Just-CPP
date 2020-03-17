@@ -809,58 +809,20 @@ Write a program to find the node at which the intersection of two singly linked 
 ---
 
 ### Python Solution
-**分析：** 两种解法，推荐第二种（显得高智商）。解法一：先遍历一次两个链表，获得它们的长度。因为有共同结点的话一定是共同结点之后都是相同的，所以让长的那个链表先走他们的长度之差，然后一同走直到两个链表的结点都是那一个。或者走到头，不存在公共结点。解法二：思路是将两个链表拼接，就可以忽略长度差，因为第二遍遍历时必定离末尾相同的距离。
+**分析：** 思路是将两个链表拼接，就可以忽略长度差，因为第二遍遍历时必定离末尾相同的距离。
 
-```python
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def getIntersectionNode(self, headA, headB):
-        lenA = lenB = 0
-        h1, h2 = headA, headB
-
-        while h1:
-            h1 = h1.next
-            lenA += 1
-
-        while h2:
-            h2 = h2.next
-            lenB += 1
-
-        if lenA > lenB:
-            for i in range(lenA - lenB):
-                headA = headA.next
-        else:
-            for i in range(lenB - lenA):
-                headB = headB.next
-
-        while headA and headB:
-            if headA == headB:
-                return headA
-            headA = headA.next
-            headB = headB.next
-
-        return None
-```
-
-**Solution2:**
-
-```python
-# class ListNode(object):
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution(object):
-    def getIntersectionNode(self, headA, headB):
-        p1, p2 = headA, headB
-        while p1 != p2:
-            p1 = p1.next if p1 else headB
-            p2 = p2.next if p2 else headA
-        return p1
+```cpp
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode *a = headA, *b = headB;
+        while (a != b) {
+            a = a ? a->next : headB;
+            b = b ? b->next : headA;
+        }
+        return a;
+    }
+};
 ```
 
 [返回目录](#00)
