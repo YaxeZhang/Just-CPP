@@ -1360,27 +1360,18 @@ rotate 4 steps to the right: 2->0->1->NULL
 class Solution {
 public:
     ListNode* rotateRight(ListNode* head, int k) {
-        class Solution {
-public:
-    ListNode* rotateRight(ListNode* head, int k) {
-        if(!head) return head;
+        if (!head) return head;
+        ListNode *newhd, *cnt = head;
+        int n = 1;
         
-        int len=1;
-        ListNode *newH, *tail;
-        newH = tail = head;
-        
-        while(tail->next) tail = tail->next, len++;
-        tail->next = head;
-
-        if(k %= len) 
-        {
-            for(; len-k; k++) tail = tail->next;
+        while (cnt->next) cnt = cnt->next, n ++;
+        cnt->next = head;
+        if (k %= n) {
+            for (; n-k; k++) cnt = cnt->next;
         }
-        newH = tail->next; 
-        tail->next = NULL;
-        return newH;
-    }
-};
+        newhd = cnt->next;
+        cnt->next = nullptr;
+        return newhd;
     }
 };
 ```
