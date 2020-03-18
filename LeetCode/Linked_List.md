@@ -1356,31 +1356,28 @@ rotate 4 steps to the right: 2->0->1->NULL
 ### Pythonic Solution
 **分析：** k 大于链表长度时仍有效，所以先取得链表长度，k 对其取模，之后快慢指针找到倒数 k 的结点，从它的后一位将链表分为两部分，交换顺序即可。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def rotateRight(self, head: ListNode, k: int) -> ListNode:
-        if not head:
-            return head
-        c, count = head, 0
-        while c:
-            count += 1
-            c = c.next
-        k %= count
-        if not k:
-            return head
-        fast = slow = head
-        for _ in range(k):
-            fast = fast.next
-        while fast.next:
-            fast = fast.next
-            slow = slow.next
-        fast.next, dummy, slow.next = head, slow.next, None
-        return dummy
+```cpp
+class Solution {
+public:
+    ListNode* rotateRight(ListNode* head, int k) {
+        if (!head) return head;
+        ListNode *cnt = head, *fast = head, *slow = head;
+        int count = 0;
+        while (cnt) cnt = cnt->next, count ++;
+        k = k % count;
+        if (!k) return head;
+        
+        for (; k--;) fast = fast->next;
+        while (fast->next) {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        ListNode *dummy = slow->next;
+        slow->next = NULL;
+        fast->next = head;
+        return dummy;
+    }
+};
 ```
 
 [返回目录](#00)
