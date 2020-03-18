@@ -898,25 +898,24 @@ Output: true
 ### Pythonic Solution
 **分析：** 快慢指针取到中间，同时翻转前半部与后半部比较。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def isPalindrome(self, head: ListNode) -> bool:
-        rev = None
-        slow = fast = head
-        while fast and fast.next:
-            fast = fast.next.next
-            rev, rev.next, slow = slow, rev, slow.next
-        if fast:
-            slow = slow.next
-        while rev and rev.val == slow.val:
-            slow = slow.next
-            rev = rev.next
-        return not rev
+```cpp
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode *fast = head, *slow = head, *rev = NULL, *tmp;
+        while (fast && fast->next) {
+            fast = fast->next->next;
+            tmp = slow->next;
+            slow->next = rev;
+            rev = slow;
+            slow = tmp;
+        }
+        if (fast) slow = slow->next;
+        while (slow && slow->val == rev->val) 
+            slow = slow->next, rev = rev->next;
+        return !rev;
+    }
+};
 ```
 
 [返回目录](#00)
