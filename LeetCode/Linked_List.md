@@ -1499,39 +1499,47 @@ Node 2's value is 2, its next pointer points to null and its random pointer poin
 ### Python Solution
 **分析：**
 
-```python
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, next, random):
-        self.val = val
-        self.next = next
-        self.random = random
-"""
-class Solution:
-    def copyRandomList(self, head: 'Node') -> 'Node':
-        if not head:
-            return None
-        p1 = p2 = p3 = head
+```cpp
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        Node *newHead, *l1, *l2;
+        if (head == NULL) return NULL;
+        for (l1 = head; l1 != NULL; l1 = l1->next->next) {
+            l2 = new Node(l1->val);
+            l2->next = l1->next;
+            l1->next = l2;
+        }
 
-        while p1:
-            tmp = Node(p1.val, p1.next, None)
-            p1.next = tmp
-            p1 = p1.next.next
+        newHead = head->next;
+        for (l1 = head; l1 != NULL; l1 = l1->next->next) {
+            if (l1->random != NULL) l1->next->random = l1->random->next;
+        }
 
-        while p2:
-            tmp = p2.next
-            tmp.random = p2.random.next if p2.random else None
-            p2 = p2.next.next
+        for (l1 = head; l1 != NULL; l1 = l1->next) {
+            l2 = l1->next;
+            l1->next = l2->next;
+            if (l2->next != NULL) l2->next = l2->next->next;
+        }
 
-        tmp = dummy = p3.next
-        while p3:
-            p3.next = tmp.next
-            tmp.next = tmp.next.next if p3.next else None
-            p3 = p3.next
-            tmp = tmp.next
-
-        return dummy
+        return newHead;
+    }
+};
 ```
 
 [返回目录](#00)
