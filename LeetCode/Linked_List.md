@@ -1400,25 +1400,21 @@ Output: 1->2->2->4->3->5
 ### Python Solution
 **分析：**
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def partition(self, head: ListNode, x: int) -> ListNode:
-        dummy = less = ListNode(0)
-        dummy2 = other = ListNode(0)
-        while head:
-            if head.val < x:
-                less.next = less = head
-            else:
-                other.next = other = head
-            head = head.next
-        other.next = None
-        less.next = dummy2.next
-        return dummy.next
+```cpp
+class Solution {
+public:
+    ListNode* partition(ListNode* head, int x) {
+        ListNode *othhd = new ListNode(0), *lsshd = new ListNode(0);
+        ListNode *oth = othhd, *lss = lsshd;
+        while (head) {
+            if (head->val < x) lss = lss->next = head;
+            else oth = oth->next = head;
+            head = head->next;
+        }
+        lss->next = othhd->next, oth->next = NULL;
+        return lsshd->next;
+    }
+};
 ```
 
 [返回目录](#00)
