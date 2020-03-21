@@ -666,38 +666,47 @@ Explanation: 342 + 465 = 807.
 ### Python Solution
 **分析：** 自我感觉十分优美的 O(1) 空间的解法，随便选一个链表作为主线，将相同长度的部分加上来，然后把剩余的部分拼接过来，如果有进位则顺理成章转化为 369，Plus One 问题。这里链表已经倒序，操作更加简便。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+```cpp
+class Solution { // 不使用额外的空间
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode *dummy = new ListNode(0), *p1 = dummy, *p2 = new ListNode(0);
+        p1->next = l1, p2->next = l2;
+        int val = 0;
+        while (p1->next && p2->next) {
+            p1 = p1->next, p2 = p2->next;
+            val += p1->val + p2->val;
+            p1->val = val % 10;
+            val = val < 10 ? 0 : 1;
+        }
+        p1->next = p1->next ? p1->next : p2->next;
+        while (val && p1->next) {
+            p1 = p1->next;
+            if (p1->val == 9) p1->val = 0;
+            else p1->val += 1, val = 0;
+        }
+        p1->next = val ? new ListNode(1) : p1->next;
+        return dummy->next;
+    }
+};
+```
 
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-        flag = 0
-        dummy = p1 = ListNode(0); p2 = ListNode(0)
-        p1.next , p2.next = l1, l2
-
-        while p1.next and p2.next:
-            p1 = p1.next
-            p2 = p2.next
-            sumval = p1.val + p2.val + flag
-            p1.val = sumval % 10
-            flag = sumval >= 10
-
-        p1.next = p1.next or p2.next
-
-        while flag and p1.next:
-            p1 = p1.next
-            if p1.val == 9:
-                p1.val = 0
-            else:
-                p1.val += 1
-                flag = 0
-
-        p1.next = ListNode(1) if flag else p1.next
-
-        return dummy.next
+```cpp
+class Solution { // 构造额外的节点
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode preHead(0), *p = &preHead;
+        int extra = 0;
+        while (l1 || l2 || extra) {
+            if (l1) extra += l1->val, l1 = l1->next;
+            if (l2) extra += l2->val, l2 = l2->next;
+            p->next = new ListNode(extra % 10);
+            extra /= 10;
+            p = p->next;
+        }
+        return preHead.next;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -942,34 +951,30 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 ### Pythonic Solution
 **分析：** 快慢指针取到中间，将后半部翻转然后两个链表交叉合并。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def reorderList(self, head):
-        if not head:
-            return
-
-        # find the mid point
-        slow = fast = head
-        while fast and fast.next:
-            slow = slow.next
-            fast = fast.next.next
-
-        # reverse the second half in-place
-        pre, node = None, slow
-        while node:
-            pre, pre.next, node = node, pre, node.next
-
-        # Merge in-place; Note : the last node of "first" and "second" are the same
-        first, second = head, pre
-        while second.next:
-            first.next, first = second, first.next
-            second.next, second = first, second.next
-        return
+```cpp
+class Solution {
+public:
+    void reorderList(ListNode* head) {
+        if (!head) return;
+        ListNode *fast = head, *slow = head, *rev = NULL, *tmp;
+        while (fast && fast->next)
+            fast = fast->next->next, slow = slow->next;
+        while (slow) {
+            tmp = slow->next;
+            slow->next = rev;
+            rev = slow;
+            slow = tmp;
+        }
+        fast = head;
+        while (rev->next) {
+            tmp = fast->next;
+            fast->next = rev;
+            fast = fast->next;
+            rev = tmp;
+        }
+        return;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1297,28 +1302,54 @@ For k = 3, you should return: 3->2->1->4->5
 ### Pythonic Solution
 **分析：** 利用 while True 和 count 进行循环计数，使得剩余满足 k 的时候才翻转，否则不变。如果 count 等于 k ，那么对于这一段的链表进行翻转即可。
 
-```python
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+```cpp
+class Solution { // 迭代法
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode *dummy = new ListNode(0), *tmp = dummy;
+        ListNode *cnt, *rev, *cur;
+        tmp->next = cnt = rev = head;
+        int len = 0;
+        while (cnt) cnt = cnt->next, len++;
+        while (len >= k) {
+            for (int i = 0; i < k-1; i++) {
+                cur = rev->next;
+                rev->next = cur->next;
+                cur->next = tmp->next;
+                tmp->next = cur;
+            }
+            tmp = rev, rev = rev->next;
+            len -= k;
+        }
+        return dummy->next;
+    }
+};
+```
 
-class Solution:
-    def reverseKGroup(self, head: ListNode, k: int) -> ListNode:
-        dummy = tmp = ListNode(0)
-        tmp.next = left = right = head
-        while True:
-            count = 0
-            while right and count < k:
-                right = right.next
-                count += 1
-            if count == k:
-                pre, cur = right, left
-                for _ in range(k):
-                    pre, pre.next, cur = cur, pre, cur.next
-                tmp.next, tmp, left = pre, left, right
-            else:
-                return dummy.next
+```cpp
+class Solution { // 伪递归法
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode *tail=head;
+        for(int i=0;i<k;i++){
+            if(!tail) return head;
+            tail=tail->next;
+        }
+        ListNode *p=reverse(head,tail);
+        head->next=reverseKGroup(tail,k);
+        return p;
+    }
+    ListNode *reverse(ListNode *head, ListNode*tail){
+        ListNode *p=tail;
+        while(head!=tail){
+            ListNode *temp=head->next;
+            head->next=p;
+            p=head;
+            head=temp;
+        }
+        return p;
+    }
+};
 ```
 
 [返回目录](#00)
