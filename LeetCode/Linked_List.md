@@ -594,59 +594,6 @@ public:
 
 [返回目录](#00)
 
-## 369  Plus One Linked List
-
-Given a non-negative integer represented as non-empty a singly linked list of digits, plus one to the integer.
-
-The digits are stored such that the most significant digit is at the head of the list.
-
-给定一个非负整数表示为非空的单个数字链表，整数加一。
-
-存储数字使得最高有效数字位于列表的开头。
-
-**Example**
-
-```
-Input: 1->2->3
-Output: 1->2->4
-```
-
----
-
-### Python Solution
-**分析：** 现将链表翻转然后找到第一位不为 9 的数字，加一再翻转回来，遍历过的为 9 的数字均置为 0 。
-
-```python
-#class ListNode(object):
-#    def __init__(self, x):
-#        self.val = x
-#        self.next = None
-
-# Two pointers solution.
-class Solution(object):
-    def plusOne(self, head):
-        if not head:
-            return None
-        dummy = ListNode(0)
-        dummy.next = head
-        left, right = dummy, head
-        while right.next:
-            if right.val != 9:
-                left = right
-            right = right.next
-        if right.val != 9:
-            right.val += 1
-        else:
-            left.val += 1
-            right = left.next
-            while right:
-                right.val = 0
-                right = right.next
-        return dummy if dummy.val else dummy.next
-```
-
-[返回目录](#00)
-
 ## 2    Add Two Numbers
 
 You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
