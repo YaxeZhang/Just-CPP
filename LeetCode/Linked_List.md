@@ -28,6 +28,7 @@
  - [86   Partition List](#86---partition-list)
  - [23   Merge k Sorted Lists](#23---merge-k-sorted-lists)
  - [147	 Insertion Sort List](#147--insertion-sort-list)
+ - [109  Convert Sorted List to Binary Search Tree](#109--convert-sorted-list-to-binary-search-tree)
  - [138  Copy List with Random Pointer](#138--copy-list-with-random-pointer)
  - [1019 Next Greater Node In Linked List](#1019-next-greater-node-in-linked-list)
 
@@ -1447,6 +1448,52 @@ class Solution:
             # 局部链表翻转
             cur.next, cur.next.next, head = head, cur.next, head.next
         return dummy.next
+```
+
+[返回目录](#00)
+
+## 109  Convert Sorted List to Binary Search Tree
+
+Given a singly linked list where elements are sorted in ascending order, convert it to a height balanced BST.
+
+For this problem, a height-balanced binary tree is defined as a binary tree in which the depth of the two subtrees of every node never differ by more than 1.
+
+给定一个单链列表，其中元素按升序排序，请将其转换为高度平衡的BST。 对于此问题，将高度平衡的二叉树定义为一个二叉树，其中每个节点的两个子树的深度相差不超过1。
+
+**Example**
+
+```
+Given the sorted linked list: [-10,-3,0,5,9],
+
+One possible answer is: [0,-3,9,-10,null,5], which represents the following height balanced BST:
+
+      0
+     / \
+   -3   9
+   /   /
+ -10  5
+```
+
+---
+
+```cpp
+class Solution {
+public:
+    TreeNode* sortedListToBST(ListNode* head) {
+        if (!head) return nullptr;
+        ListNode *fast = head, *slow = head, *pre = head;
+        while (fast && fast->next) {
+            pre = slow;
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        pre->next = nullptr;
+        TreeNode *root = new TreeNode(slow->val);
+        root->left = sortedListToBST(head == slow ? nullptr : head);
+        root->right = sortedListToBST(slow->next);
+        return root;
+    }
+};
 ```
 
 [返回目录](#00)
