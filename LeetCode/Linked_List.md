@@ -1429,25 +1429,22 @@ Output: -1->0->3->4->5
 ### Python Solution
 **分析：** 有点类似于链表翻转，其实插入排序确实可以理解成翻转的形式。重点在于第一步的优化，让找值不用每次从开始找
 
-```python
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
-
-class Solution:
-    def insertionSortList(self, head: ListNode) -> ListNode:
-        dummy = cur = ListNode(0)
-        while head:
-            if cur and cur.val > head.val:
-                cur = dummy
-            # 找到插入的位置
-            while cur.next and cur.next.val < head.val:
-                cur = cur.next
-            # 局部链表翻转
-            cur.next, cur.next.next, head = head, cur.next, head.next
-        return dummy.next
+```cpp
+class Solution {
+public:
+    ListNode* insertionSortList(ListNode* head) {
+        ListNode *dummy = new ListNode(0), *cur = dummy, *tmp;
+        while (head) {
+            if (cur && cur->val > head->val) cur = dummy;
+            while (cur->next && cur->next->val < head->val) cur = cur->next;
+            tmp = head->next;
+            head->next = cur->next;
+            cur->next = head;
+            head = tmp;
+        }
+        return dummy->next;
+    }
+};
 ```
 
 [返回目录](#00)
