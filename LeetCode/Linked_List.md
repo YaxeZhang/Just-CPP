@@ -47,7 +47,7 @@ Output: 5->4->3->2->1->NULL
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 反转链表是链表操作里比较经典的题型，操作为用一个单链表储存新的反转后的链表，原链表从前到后把每个节点和链表分开并且添加到新的单链表后边，再将原链表的head指向head.next 完成head的后移。代码如下：
 
 ```cpp
@@ -139,7 +139,7 @@ Explanation: There is no cycle in the linked list.
 
 ---
 
-### Python Solution
+### c p p Solution
 **分析：**
 
 **更简洁！！**
@@ -181,7 +181,7 @@ Since the list has two middle nodes with values 3 and 4, we return the second on
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -217,7 +217,7 @@ Given 1->2->3->4, you should return the list as 2->1->4->3.
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 我们如果要交换下两个结点，那么很容易想到：
 1. 把当前结点的 next 指向下下个结点
 2. 把下下个结点的 next 指向当前结点的下个结点
@@ -268,7 +268,7 @@ Output: 2->3->6->7->1->5->4->NULL
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 将链表分成奇偶两条然后进行拼接即可，重点是边界判断
 
 ```cpp
@@ -309,7 +309,7 @@ Output: 1->4->3->2->5->NULL
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 思路比较简单，可以参考[Reverse Linked List ](https://blog.csdn.net/Y_axe/article/details/99718252) 的解法，找到要反转的头和尾，进行反转操作即可
 
 ```cpp
@@ -381,7 +381,7 @@ Explanation: You are given the third node with value 1, the linked list should b
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 有点蠢的题。
 
 ```cpp
@@ -427,7 +427,7 @@ Given n will always be valid.
 
 ---
 
-#### Python Solution
+#### cpp Solution
 
 ```cpp
 class Solution {
@@ -471,7 +471,7 @@ Output: 1->2->3
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -509,7 +509,7 @@ Output: 1->2->3->4->5
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -568,7 +568,7 @@ Output: 2->3
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -611,7 +611,7 @@ Explanation: 342 + 465 = 807.
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 自我感觉十分优美的 O(1) 空间的解法，随便选一个链表作为主线，将相同长度的部分加上来，然后把剩余的部分拼接过来，如果有进位则顺理成章转化为 369，Plus One 问题。这里链表已经倒序，操作更加简便。
 
 ```cpp
@@ -681,10 +681,10 @@ Output: 7 -> 8 -> 0 -> 7
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 两种解法，一种和上题一样是原地操作的 O(1) 的空间，一种是创建新的链表。
 
-```python
+```cpp
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -728,7 +728,7 @@ class Solution:
         return dummy1 if dummy1.val else dummy1.next
 ```
 
-```python
+```cpp
 class Solution:
     def addTwoNumbers(self, l1: 'ListNode', l2: 'ListNode') -> 'ListNode':
         if not l1 and not l2:
@@ -765,7 +765,7 @@ Write a program to find the node at which the intersection of two singly linked 
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 思路是将两个链表拼接，就可以忽略长度差，因为第二遍遍历时必定离末尾相同的距离。
 
 ```cpp
@@ -799,7 +799,7 @@ Output: 1->1->2->3->4->4
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 进行比较哪个值小取哪个，然后被取值的往前走一步，没有比较之后把多的补到后面即可。
 
 ```cpp
@@ -852,7 +852,7 @@ Output: true
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 快慢指针取到中间，同时翻转前半部与后半部比较。
 
 ```cpp
@@ -896,7 +896,7 @@ Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 快慢指针取到中间，将后半部翻转然后两个链表交叉合并。
 
 ```cpp
@@ -955,7 +955,7 @@ Explanation: There is a cycle in the linked list, where tail connects to the fir
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 快慢指针找到相交的那点后，一个从那个点出发另一个从头出发，相遇的点既是环的入口
 
 ```cpp
@@ -1004,10 +1004,10 @@ Output:
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 利用栈辅助来进行赋值。
 
-```python
+```cpp
 """
 # Definition for a Node.
 class Node:
@@ -1077,10 +1077,10 @@ The flattened tree should look like:
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 两种做法，一种是迭代实现，一种是递归实现。但都是利用一个值保存上一个或下一个结点。
 
-```python
+```cpp
 # Definition for a binary tree node.
 # class TreeNode:
 #     def __init__(self, x):
@@ -1107,7 +1107,7 @@ class Solution:
                 tmp = node
 ```
 
-```python
+```cpp
 class Solution:
     def __init__(self):
         self.prev = None
@@ -1145,10 +1145,10 @@ Output: -1->0->3->4->5
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 两种做法，一种是归并排序，一种是快速排序，都是 nlgn 的解法，而且不用额外空间。
 
-```python
+```cpp
 # Definition for singly-linked list.
 # class ListNode:
 #     def __init__(self, x):
@@ -1181,7 +1181,7 @@ class Solution:
         return dummy.next
 ```
 
-```python
+```cpp
 class Solution:
     def sortList(self, head: ListNode) -> ListNode:
         if not head or not head.next:
@@ -1247,7 +1247,7 @@ For k = 3, you should return: 3->2->1->4->5
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** 利用 while True 和 count 进行循环计数，使得剩余满足 k 的时候才翻转，否则不变。如果 count 等于 k ，那么对于这一段的链表进行翻转即可。
 
 ```cpp
@@ -1332,7 +1332,7 @@ rotate 4 steps to the right: 2->0->1->NULL
 
 ---
 
-### Pythonic Solution
+### cpp Solution
 **分析：** k 大于链表长度时仍有效，所以先取得链表长度，k 对其取模，之后快慢指针找到倒数 k 的结点，从它的后一位将链表分为两部分，交换顺序即可。
 
 ```cpp
@@ -1376,7 +1376,7 @@ Output: 1->2->2->4->3->5
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -1426,7 +1426,7 @@ Output: -1->0->3->4->5
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 有点类似于链表翻转，其实插入排序确实可以理解成翻转的形式。重点在于第一步的优化，让找值不用每次从开始找
 
 ```cpp
@@ -1518,7 +1518,7 @@ Node 2's value is 2, its next pointer points to null and its random pointer poin
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：**
 
 ```cpp
@@ -1589,11 +1589,11 @@ Output: [7,9,9,9,0,5,0,0]
 
 ---
 
-### Python Solution
+### cpp Solution
 **分析：** 1.Save the linked list values and access them from back to front for easy addition to list.
 2.Use list to save the maximum value that occurred before.
 
-```python
+```cpp
 class Solution:
     def nextLargerNodes(self, head: ListNode) -> List[int]:
         if not head:
