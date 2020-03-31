@@ -1398,7 +1398,7 @@ public:
 
 [返回目录](#00)
 
-## 147	 Insertion Sort List
+## 147  Insertion Sort List
 
 Algorithm of Insertion Sort:
 
