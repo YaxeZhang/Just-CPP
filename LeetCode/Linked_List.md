@@ -3,7 +3,7 @@
  - [206  Reverse Linked List](#206--reverse-linked-list)
  - [141  Linked List Cycle](#141--linked-list-cycle)
  - [876  Middle of the Linked List](#876--middle-of-the-linked-list)
- - [24	 Swap Nodes in Pairs](#24---swap-nodes-in-pairs)
+ - [24     Swap Nodes in Pairs](#24---swap-nodes-in-pairs)
  - [328  Odd Even Linked List](#328--odd-even-linked-list)
  - [92   Reverse Linked List II](#92---reverse-linked-list-ii)
  - [237  Delete Node in a Linked List](#237--delete-node-in-a-linked-list)
@@ -12,13 +12,13 @@
  - [203  Remove Linked List Elements](#203--remove-linked-list-elements)
  - [82   Remove Duplicates from Sorted List II](#82---remove-duplicates-from-sorted-list-ii)
  - [369  Plus One Linked List](#369--plus-one-linked-list)
- - [2	   Add Two Numbers](#2----add-two-numbers)
+ - [2       Add Two Numbers](#2----add-two-numbers)
  - [445  Add Two Numbers II](#445--add-two-numbers-ii)
- - [160	 Intersection of Two Linked Lists](#160--intersection-of-two-linked-lists)
+ - [160     Intersection of Two Linked Lists](#160--intersection-of-two-linked-lists)
  - [21   Merge Two Sorted Lists](#21---merge-two-sorted-lists)
 ## 提高
- - [234	 Palindrome Linked List](#234--palindrome-linked-list)
- - [143	 Reorder List](#143--reorder-list)
+ - [234     Palindrome Linked List](#234--palindrome-linked-list)
+ - [143     Reorder List](#143--reorder-list)
  - [142  Linked List Cycle II](#142--linked-list-cycle-ii)
  - [430  Flatten a Multilevel Doubly Linked List](#430--flatten-a-multilevel-doubly-linked-list)
  - [114  Flatten Binary Tree to Linked List](#114--flatten-binary-tree-to-linked-list)
@@ -27,7 +27,7 @@
  - [61   Rotate List](#61---rotate-list)
  - [86   Partition List](#86---partition-list)
  - [23   Merge k Sorted Lists](#23---merge-k-sorted-lists)
- - [147	 Insertion Sort List](#147--insertion-sort-list)
+ - [147     Insertion Sort List](#147--insertion-sort-list)
  - [109  Convert Sorted List to Binary Search Tree](#109--convert-sorted-list-to-binary-search-tree)
  - [138  Copy List with Random Pointer](#138--copy-list-with-random-pointer)
  - [1019 Next Greater Node In Linked List](#1019-next-greater-node-in-linked-list)
@@ -139,7 +139,7 @@ Explanation: There is no cycle in the linked list.
 
 ---
 
-### c p p Solution
+### cpp Solution
 **分析：**
 
 **更简洁！！**
@@ -1078,49 +1078,25 @@ The flattened tree should look like:
 ---
 
 ### cpp Solution
-**分析：** 两种做法，一种是迭代实现，一种是递归实现。但都是利用一个值保存上一个或下一个结点。
+**分析：** 递归实现，利用一个值保存上一个或下一个结点。
 
 ```cpp
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+class Solution {
+private:
+    TreeNode *prev = nullptr;
 
-class Solution:
-    def flatten(self, root: TreeNode) -> None:
-        """
-        Do not return anything, modify root in-place instead.
-        """
-        if not root:return
-        stack = [root]
-        tmp = None
-        while stack:
-            node = stack.pop()
-            if node:
-                stack.append(node.right)
-                stack.append(node.left)
-                node.left = None
-                if tmp:
-                    tmp.right = node
-                tmp = node
-```
+public:
+    void flatten(TreeNode* root) {
+        if (!root) return;
+        flatten(root->right);
+        flatten(root->left);
 
-```cpp
-class Solution:
-    def __init__(self):
-        self.prev = None
-
-    def flatten(self, root):
-        if not root:
-            return None
-        self.flatten(root.right)
-        self.flatten(root.left)
-
-        root.right = self.prev
-        root.left = None
-        self.prev = root
+        root->right = prev;
+        root->left = nullptr;
+        prev = root;
+        return;
+    }
+};
 ```
 
 [返回目录](#00)
