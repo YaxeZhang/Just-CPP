@@ -3,17 +3,17 @@
  - [389. Find the Difference](#389-find-the-difference)
  - [136. Single Number](#136-single-number)
  - [137. Single Number II](#137-single-number-ii)
- - [318	Maximum Product of Word Lengths]
-## 很少考			
- - [393	UTF-8 Validation]
+ - [318    Maximum Product of Word Lengths]
+## 很少考            
+ - [393    UTF-8 Validation]
  - [201. Bitwise AND of Numbers Range](#201-bitwise-and-of-numbers-range)
  - [371. Sum of Two Integers](#371-sum-of-two-integers)
  - [338. Counting Bits](#338-counting-bits)
- - [89	Gray Code]
- - [268	Missing Number]
- - [191	Number of 1 Bits]
- - [190	Reverse Bits]
- - [260	Single Number III]
+ - [89    Gray Code]
+ - [268    Missing Number]
+ - [191    Number of 1 Bits]
+ - [190    Reverse Bits]
+ - [260    Single Number III]
 
 
 ## 389. Find the Difference
@@ -79,22 +79,15 @@ Output: 4
 ### Python Solution
 **分析：** 很经典的一个位运算异或的题目。
 
-```python
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        res = 0
-        for i in nums:
-            res ^= i
-        return res
-```
-
-**reduce 的一个用法** 这里我们同样可以通过 reduce() 函数来完成，只是提供思路，但效率没有上面的高（涉及导入包、调用函数之类）
-
-```python
-from functools import reduce
-class Solution:
-    def singleNumber(self, nums: List[int]) -> int:
-        return reduce(int.__xor__, nums)
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res = 0;
+        for (auto num : nums) res ^= num;
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
