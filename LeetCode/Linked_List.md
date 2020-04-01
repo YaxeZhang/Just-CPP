@@ -685,74 +685,64 @@ Output: 7 -> 8 -> 0 -> 7
 **分析：** 两种解法，一种和上题一样是原地操作的 O(1) 的空间，一种是创建新的链表。
 
 ```cpp
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        stack<int> num1,num2;
+        for (; l1; l1 = l1->next)
+            num1.push(l1->val);
+        for (; l2; l2 = l2->next)
+            num2.push(l2->val);
 
-class Solution:
-    def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
-
-        def countlength(root):
-            cnt = 0
-            while root:
-                root = root.next
-                cnt += 1
-            return cnt
-
-        c1, c2 = l1, l2
-        len1, len2 = countlength(c1), countlength(c2)
-        if len2 > len1:
-            len1, len2, l1, l2 = len2, len1, l2, l1
-        dummy1 = tmp = tmp1 = ListNode(0)
-        tmp.next = l1
-
-        for _ in range(len1 - len2):
-            tmp = tmp.next
-            if tmp.val != 9:
-                tmp1 = tmp
-
-        cur = tmp.next
-        while cur:
-            val = cur.val + l2.val
-            cur.val = val % 10
-            if val < 9:
-                tmp1 = cur
-            elif val > 9:
-                while tmp1 != cur:
-                    tmp1.val = (tmp1.val + 1) % 10
-                    tmp1 = tmp1.next
-            cur, l2 = cur.next, l2.next
-
-        return dummy1 if dummy1.val else dummy1.next
+        ListNode *list=new ListNode(0);
+        int sum=0;
+        while (!num1.empty() || !num2.empty()){
+            if (!num1.empty()) {sum += num1.top(); num1.pop();}
+            if (!num2.empty()) {sum += num2.top(); num2.pop();}
+            list->val = sum % 10;
+            ListNode *head = new ListNode(sum / 10);
+            head->next = list;
+            list = head;
+            sum = sum / 10;
+        }
+        return list->val == 0 ? list->next : list;
+    }
+};
 ```
 
 ```cpp
-class Solution:
-    def addTwoNumbers(self, l1: 'ListNode', l2: 'ListNode') -> 'ListNode':
-        if not l1 and not l2:
-            return None
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int n1 = 0, n2 = 0, val;
+        ListNode *c1 = l1, *c2 = l2;
+        for (; c1; c1 = c1->next)
+            n1++;
+        for (; c2; c2 = c2->next)
+            n2++;
+        if (n2 > n1) swap(l1, l2), swap(n1, n2);
 
-        l1_num = 0
-        while l1:
-            l1_num = l1_num * 10 + l1.val
-            l1 = l1.next
+        ListNode *dummy = new ListNode(0), *tmp = dummy, *tmp1 = dummy;
+        tmp->next = l1;
+        for (; n1 != n2; n1--) {
+            tmp = tmp->next;
+            if (tmp->val != 9) tmp1 = tmp;
+        }
 
-        l2_num = 0
-        while l2:
-            l2_num = l2_num * 10 + l2.val
-            l2 = l2.next
-
-        lsum = l1_num + l2_num
-
-        head = ListNode(None)
-        cur = head
-        for istr in str(lsum):
-            cur.next = ListNode(int(istr))
-            cur = cur.next
-
-        return head.next
+        c1 = tmp->next, c2 = l2;
+        while (c1) {
+            val = c1->val + c2->val;
+            c1->val = val % 10;
+            if (val < 9) tmp1 = c1;
+            else if (val > 9) {
+                for (; tmp1 != c1; tmp1 = tmp1->next)
+                    tmp1->val = (tmp1->val + 1) % 10;
+            }
+            c1 = c1->next, c2 = c2->next;
+        }
+        return dummy->val ? dummy : dummy->next;
+    }
+};
 ```
 
 [返回目录](#00)
