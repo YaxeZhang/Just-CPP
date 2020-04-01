@@ -77,7 +77,7 @@ Output: 4
 ---
 
 ### Python Solution
-**分析：** 很经典的一个位运算异或的题目。
+**分析：** 很经典的一个位运算异或的题目。利用异或的性质，可以将重复2次的数字去除，所以遍历一遍后剩下的就是单次出现的数字。
 
 ```cpp
 class Solution {
@@ -112,30 +112,37 @@ Output: 99
 ---
 
 ### Python Solution
-**分析：** 炫酷！！！
+**分析：** 两种做法：1. 比较容易想到。遍历位数，如果所有数字在这位上的总和不是3的倍数，那么单次出现的数字在这一位一定有值，逐位拼凑出来这个数字 2. 这个解法比较炫酷，需要对位运算比较了解，面试不易想出。如果你想写这种解法，请确定你一定可以每一步都和面试官沟通清楚。
 
-```python
-class Solution:
-    def singleNumber(self, nums):
-        ans = 0
-        for i in range(32):
-            cnt = 0
-            for n in nums:
-                if (n >> i) & 1:
-                    cnt += 1
-            if cnt % 3:
-                ans |= 1 << i
-        return ans if ans < 2**31 else ans - 2**32
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        long long res = 0;
+        for (int i = 0; i < 32; i++) {
+            int count = 0;
+            for (auto num : nums) {
+                if ((num >> i) & 1) count++;
+            }
+            if (count % 3) res |= 1 << i;
+        }
+        return res <= INT_MAX ? res : res - INT_MAX;
+    }
+};
 ```
 
-```python
-class Solution:
-    def singleNumber(self, nums):
-        a = b = 0
-        for n in nums:
-            a = (a ^ n) & ~b
-            b = (b ^ n) & ~a
-        return a
+```cpp
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int a = 0, b = 0;
+        for (auto num : nums) {
+            a = (a ^ num) & ~b;
+            b = (b ^ num) & ~a;
+        }
+        return a;
+    }
+};
 ```
 
 [返回目录](#00)
