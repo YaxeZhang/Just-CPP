@@ -745,16 +745,35 @@ Explanation:
 ---
 
 ### Python Solution
-**分析：** 用集合保留出现过的数字保证它不是在循环。
+**分析：**  floyd环来判断是不是循环，效率应该会比额外空间（集合或者hashmap）低。
 
-```python
-class Solution:
-    def isHappy(self, n):
-        stop = {1}
-        while n not in stop:
-            stop.add(n)
-            n = sum(int(d)**2 for d in str(n))
-        return n == 1
+```cpp
+class Solution {
+public:
+    int next(int n)
+    {
+        int sum = 0;
+
+        for (; n; n = n / 10)
+            sum += pow(n % 10,2);
+
+        return sum;
+    }
+
+public:
+    bool isHappy(int n) {
+        int slow = next(n);
+        int fast = next(next(n));
+
+        while(slow != fast)
+        {
+            slow = next(slow);
+            fast = next(next(fast));
+        }
+
+        return fast == 1 ;
+    }
+};
 ```
 
 [返回目录](#00)
