@@ -107,24 +107,18 @@ Explanation: [4,-1,2,1] has the largest sum = 6.
 ### Python Solution
 **分析：** 动态规划做法及其优化。实际上用 best 存储当前 dp 的最大值， curr 存储 dp[i]。
 
-```python
-class Solution:
-    def maxSubArray(self, nums: List[int]) -> int:
-        dp = [0 for _ in range(len(nums))]
-        dp[0] = nums[0]
-        for i in range(1, len(nums)):
-            dp[i] = max(dp[i-1]+nums[i], nums[i])
-        return max(dp)
-```
-
-```python
-class Solution:
-    def maxSubArray(self, nums: List[int]) -> int:
-        best = curr = nums[0]
-        for i in range(1, len(nums)):
-            curr = max(nums[i], curr + nums[i])
-            best = max(best, curr)
-        return best
+```cpp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int cur = nums[0], best = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            cur = max(nums[i], nums[i] + cur);
+            best = max(best, cur);
+        }
+        return best;
+    }
+};
 ```
 
 [返回目录](#00)
