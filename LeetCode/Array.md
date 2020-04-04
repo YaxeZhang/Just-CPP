@@ -1310,15 +1310,18 @@ Output: [1,3,12,0,0]
 ### Python Solution
 **分析：** k 永远指向的是遍历到的交换后最开头的一个 0 ，并且与当前遍历到的不为 0 的数进行交换。当遍历到最后的时候，即完成了所有的交换，将所有 0 交换到了末尾。
 
-```python
-class Solution:
-    def moveZeroes(self, nums: List[int]) -> None:
-        k = 0
-        for i in range(len(nums)):
-            if nums[i]:
-                if i != k:
-                    nums[i], nums[k] = nums[k], nums[i]
-                k += 1
+```cpp
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
+        for (int i = 0, pos = 0; i < nums.size(); i++) {
+            if (nums[i]) {
+                if (i != pos) swap(nums[i], nums[pos]);
+                pos += 1;
+            }
+        }
+    }
+};
 ```
 
 [返回目录](#00)
