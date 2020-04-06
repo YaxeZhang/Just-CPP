@@ -348,13 +348,23 @@ Output:
 ### Python Solution
 **分析：** sorted 返回的是列表不能散列，所以用 tuple 封装一下。
 
-```python
-class Solution:
-    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
-        ans = collections.defaultdict(list)
-        for s in strs:
-            ans[tuple(sorted(s))].append(s)
-        return ans.values()
+```cpp
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> mp;
+        for (string s : strs) {
+            string t = s;
+            sort(t.begin(), t.end());
+            mp[t].push_back(s);
+        }
+        vector<vector<string>> anagrams;
+        for (auto p : mp) {
+            anagrams.push_back(p.second);
+        }
+        return anagrams;
+    }
+};
 ```
 
 [返回目录](#00)
