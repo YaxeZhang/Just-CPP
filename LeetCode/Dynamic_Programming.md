@@ -154,29 +154,19 @@ Output: 28
 ---
 
 ### Python Solution
-**分析：**
+**分析：** 动态规划简单题，当前dp值是 左值 加 上值。
 
-```python
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        dp = [[1 for _ in range(n)] for _ in range(m)]
-        for i in range(1, m):
-            for j in range(1, n):
-                dp[i][j] = dp[i-1][j] + dp[i][j-1]
-
-        return dp[-1][-1]
-```
-
-**可简化为一维**
-
-```python
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        dp = [1 for _ in range(n)]
-        for i in range(1, m):
-            for j in range(1, n):
-                dp[j] = dp[j] + dp[j-1]
-        return dp[-1]
+```cpp
+class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        vector<int> dp(n, 1);
+        for (int i = 1; i < m; i++)
+            for (int j = 1; j < n; j++)
+                dp[j] += dp[j-1];
+        return dp[n-1];
+    }
+};
 ```
 
 **数学方法**
