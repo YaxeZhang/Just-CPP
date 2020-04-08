@@ -169,16 +169,6 @@ public:
 };
 ```
 
-**数学方法**
-
-```python
-from math import factorial
-
-class Solution:
-    def uniquePaths(self, m: int, n: int) -> int:
-        return int(factorial(n+m-2) / (factorial(n-1) * factorial(m-1)))
-```
-
 [返回目录](#00)
 
 ## 63. Unique Paths II
@@ -253,15 +243,7 @@ class Solution:
         m, n = len(obstacleGrid), len(obstacleGrid[0])
         dp = [0 for _ in range(n)]
         dp[0] = 1
-        for i in range(m):
-            if obstacleGrid[i][0] == 1:
-                dp[0] = 0
-            for j in range(1, n):
-                if obstacleGrid[i][j] == 0:
-                    dp[j] = dp[j] + dp[j - 1]
-                else:
-                    dp[j] = 0
-        return dp[-1]
+         
 ```
 
 [返回目录](#00)
@@ -1107,29 +1089,22 @@ Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (m
 ---
 
 ### Python Solution
-**分析：** 当前房间偷不偷取决于上上间加当前房间的价值和上一间的值哪个大。状态方程在下面。当然 如果看穿了以后就可以简化成第二种写法。处理 base case 更干净简单。
-
-```python
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        if not nums: return 0
-        if len(nums) == 1: return nums[0]
-        dp = nums[:]
-        dp[1] = max(dp[0], dp[1])
-        for i in range(2, len(nums)):
-            dp[i] = max(nums[i] + dp[i-2], dp[i-1])
-        return dp[-1]
-```
+**分析：** 当前房间偷不偷取决于上上间加当前房间的价值和上一间的值哪个大。状态方程在下面。当然 如果看穿了以后就可以简化。处理 base case 更干净简单。
 
 **看破实质后的解脱**
 
-```python
-class Solution:
-    def rob(self, nums: List[int]) -> int:
-        prev1, prev2 = 0, 0
-        for num in nums:
-            prev1, prev2 = max(prev2 + num, prev1), prev1
-        return prev1
+```cpp
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        int prev = 0, res = 0;
+        for (auto n : nums) {
+            prev = max(prev + n, res);
+            swap(prev, res);
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
