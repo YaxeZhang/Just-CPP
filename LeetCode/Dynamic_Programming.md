@@ -1114,15 +1114,24 @@ Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
 ### Python Solution
 **分析：** 和上一题的区别就是首尾相连的需要考虑，所以需要考虑这个条件即可。
 
-```python
-class Solution:
-    def rob(self, nums):
-        def rob(nums):
-            now = prev = 0
-            for n in nums:
-                now, prev = max(now, prev + n), now
-            return now
-        return max(rob(nums[len(nums) != 1:]), rob(nums[:-1]))
+```cpp
+class Solution {
+private:
+    int helper(vector<int>& nums, int st, int ed) {
+        int prev = 0, res = 0;
+        for (int i = st; i < ed; i++) {
+            prev = max(prev + nums[i], res);
+            swap(prev, res);
+        }
+        return res;
+    }
+
+public:
+    int rob(vector<int>& nums) {
+        int len = nums.size();
+        return max(helper(nums, len != 1, len), helper(nums, 0, len-1));
+    }
+};
 ```
 
 [返回目录](#00)
