@@ -1348,23 +1348,22 @@ Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.
 ### Python Solution
 **分析：** 有一点动态规划的思维在里面， 想好状态是如何转移的，画图就好了。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    pair<int, int> robDFS(TreeNode* root){
+        if (!root) return make_pair(0, 0);
+        auto l = robDFS(root->left);
+        auto r = robDFS(root->right);
+        return make_pair(max(l.first, l.second) + max(r.first, r.second), root->val + l.first + r.first);
+    }
 
-class Solution:
-    def rob(self, root: TreeNode) -> int:
-
-        def dfs(root):
-            if not root:
-                return 0, 0
-            left = dfs(root.left)
-            right = dfs(root.right)
-            return max(left) + max(right), root.val + left[0] + right[0]
+public:
+    int rob(TreeNode* root) {
+        auto res = robDFS(root);
+        return max(res.first, res.second);
+    }
+};
 ```
 
 [返回目录](#00)
