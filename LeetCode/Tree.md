@@ -147,46 +147,47 @@ Output: [1,3,2]
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    void dfs(vector<int>& res, TreeNode* root) {
+        if (!root) return;
+        dfs(res, root->left);
+        res.push_back(root->val);
+        dfs(res, root->right);
+        return;
+    }
 
-class Solution:
-    def inorderTraversal(self, root: TreeNode) -> List[int]:
-        res = []
-        self.dfs(root, res)
-        return res
-
-    def dfs(self,root, res):
-        if root:
-            self.dfs(root.left, res)
-            res.append(root.val)
-            self.dfs(root.right, res)
-
-# More easier
-class Solution:
-    def inorderTraversal(self, root):
-        return [] if not root else self.inorderTraversal(root.left) + [root.val] + self.inorderTraversal(root.right)
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        dfs(res, root);
+        return res;
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def inorderTraversal(self, root):
-        res, stack = [], []
-        while stack or root:
-            if root:
-                stack.append(root)
-                root = root.left
-            else:
-                node = stack.pop()
-                res.append(node.val)
-                root = node.right
-        return res
+```cpp
+class Solution {
+public:
+    vector<int> inorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> tmp;
+        while (!tmp.empty() || root) {
+            while (root) {
+                tmp.push(root);
+                root = root->left;
+            }
+            auto node = tmp.top();
+            tmp.pop();
+            res.push_back(node->val);
+            root = node->right;
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
