@@ -216,44 +216,47 @@ Output: [3,2,1]
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    void dfs(vector<int>& res, TreeNode* root) {
+        if (!root) return;
+        dfs(res, root->left);
+        dfs(res, root->right);
+        res.push_back(root->val);
+        return;
+    }
 
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        res = []
-        self.dfs(root, res)
-        return res
-
-    def dfs(self,root, res):
-        if root:
-            self.dfs(root.left, res)
-            self.dfs(root.right, res)
-            res.append(root.val)
-
-# More easier
-class Solution:
-    def postorderTraversal(self, root: TreeNode) -> List[int]:
-        return self.postorderTraversal(root.left) + self.postorderTraversal(root.right) + [root.val] if root else []
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        dfs(res, root);
+        return res;
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def postorderTraversal(self, root):
-        stack, res = [root], []
-        while stack:
-            node = stack.pop()
-            if node:
-                res.append(node.val)
-                stack.append(node.left)
-                stack.append(node.right)
-        return res[::-1]
+```cpp
+class Solution {
+public:
+    vector<int> postorderTraversal(TreeNode* root) {
+        vector<int> res;
+        stack<TreeNode*> tmp;
+        tmp.push(root);
+        while (!tmp.empty()) {
+            root = tmp.top(), tmp.pop();
+            if (root) {
+                res.push_back(root->val);
+                tmp.push(root->left);
+                tmp.push(root->right);
+            }
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
