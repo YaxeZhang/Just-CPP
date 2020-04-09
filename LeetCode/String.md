@@ -1019,32 +1019,29 @@ For example, given n = 3, a solution set is:
 ---
 
 ### Python Solution
-**分析：** 第一种回溯法？， 第二种感觉有点暴力的意思，只不过智能一点
+**分析：** 回溯法
 
-```python
-class Solution(object):
-    def generateParenthesis(self, N):
-        def generate(p, left, right, pars = []):
-            if left:
-                generate(p + '(', left - 1, right)
-            if right > left:
-                generate(p + ')', left, right - 1)
-            if not right:
-                pars.append(p)
-            return pars
-        return generate('', N, N)
-```
+```cpp
+class Solution {
+private:
+    void generate(string s, int l, int r, vector<string>& res) {
+        if (l)
+            generate(s + "(", l - 1, r, res);
+        if (r > l)
+            generate(s + ")", l, r - 1, res);
+        if (!r)
+            res.push_back(s);
+        return;
+    }
 
-```python
-class Solution(object):
-    def generateParenthesis(self, N):
-        if N == 0: return ['']
-        ans = []
-        for c in range(N):
-            for left in self.generateParenthesis(c):
-                for right in self.generateParenthesis(N-1-c):
-                    ans.append('({}){}'.format(left, right))
-        return ans
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        if (!n) return res;
+        generate("", n, n, res);
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
