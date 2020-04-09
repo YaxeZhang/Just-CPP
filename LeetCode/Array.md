@@ -664,22 +664,18 @@ Output: 6
 **分析：** 双指针做法，左右贪心。
 
 ```python
-class Solution:
-    def trap(self, height: List[int]) -> int:
-        if not height:
-            return 0
-        res, i, j = 0, 0, len(height)-1
-        l_max, r_max = height[i], height[j]
-        while i < j:
-            if l_max > r_max:
-                j -= 1
-                r_max = max(r_max, height[j])
-                res += max(0, r_max - height[j])
-            else:
-                i += 1
-                l_max = max(l_max, height[i])
-                res += max(0, l_max - height[i])
-        return res
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        int l = 0, r = height.size()-1, level = 0, water = 0;
+        while (l < r) {
+            int lower = height[height[l] < height[r] ? l++ : r--];
+            level = max(level, lower);
+            water += level - lower;
+        }
+        return water;
+    }
+};
 ```
 
 [返回目录](#00)
