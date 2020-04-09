@@ -438,38 +438,39 @@ Output: false
 ### Python Solution
 **分析：** 递归和迭代法。推荐递归。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
-        if p and q:
-            return p.val == q.val and self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
-        return p is q
+```cpp
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        if (p && q)
+            return p->val == q->val
+                && isSameTree(p->left, q->left)
+                && isSameTree(p->right, q->right);
+        return p == q;
+    }
+};
 ```
 
 **DFS**
 
-```Python
-class Solution:
-    def isSameTree(self, p, q):
-        stack = [(p, q)]
-        while stack:
-            n1, n2 = stack.pop()
-            if n1 and n2 and n1.val == n2.val:
-                stack.append((n1.right, n2.right))
-                stack.append((n1.left, n2.left))
-            elif n1 is n2:
-                continue
-            else:
-                return False
-        return True
-```
+```cpp
+class Solution {
+public:
+    bool isSameTree(TreeNode* p, TreeNode* q) {
+        stack<vector<TreeNode*>> s({vector<TreeNode*>({p, q})});
+        while(!s.empty()) {
+            TreeNode *n1 = s.top()[0], *n2 = s.top()[1];
+            s.pop();
+            if (n1 && n2 && n1->val == n2->val) {
+                s.push({n1->left, n2->left});
+                s.push({n1->right, n2->right});
+            } else if (n1 == n2) {
+                continue;
+            } else return false;
+        }
+        return true;
+    }
+};
 
 **BFS**
 
