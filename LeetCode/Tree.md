@@ -471,22 +471,6 @@ public:
         return true;
     }
 };
-
-**BFS**
-
-```Python
-class Solution:
-    def isSameTree(self, p, q):
-        dq = collections.deque([(p, q)])
-        while dq:
-            n1, n2 = dq.popleft()
-            if n1 and n2 and n1.val == n2.val:
-                dq.extend([(n1.left, n2.left), (n1.right, n2.right)])
-            elif n1 is n2:
-                continue
-            else:
-                return False
-        return True
 ```
 
 [返回目录](#00)
@@ -523,24 +507,24 @@ But the following [1,2,2,null,3,null,3] is not:
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    bool isSym(TreeNode* p, TreeNode* q) {
+        if (p && q) {
+            return p->val == q->val
+                && isSym(p->left, q->right)
+                && isSym(p->right, q->left);
+        }
+        return p == q;
+    }
 
-class Solution:
-    def isSymmetric(self, root: TreeNode) -> bool:
-        if not root:
-            return True
-        return self.compare(root.left, root.right)
-
-    def compare(self, p, q):
-        if p and q:
-            return p.val == q.val and self.compare(p.left, q.right) and self.compare(p.right, q.left)
-        return p is q
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (!root) return true;
+        return isSym(root->left, root->right);
+    }
+};
 ```
 
 **迭代法**
@@ -594,33 +578,40 @@ Output:
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def invertTree(self, root: TreeNode) -> TreeNode:
-        if root:
-            root.left, root.right = self.invertTree(root.right), self.invertTree(root.left)
-            return root
+```cpp
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        if (!root) return nullptr;
+        TreeNode *tmp = root->right;
+        root->right = invertTree(root->left);
+        root->left = invertTree(tmp);
+        return root;
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def invertTree(self, root):
-        stack = [root]
-        while stack:
-            node = stack.pop()
-            if node:
-                node.left, node.right = node.right, node.left
-                stack.extend([node.left, node.right])
-        return root
+```cpp
+class Solution {
+public:
+    TreeNode* invertTree(TreeNode* root) {
+        stack<TreeNode*> stk;
+        stk.push(root);
+
+        while (!stk.empty()) {
+            TreeNode* node = stk.top();
+            stk.pop();
+            if (node) {
+                swap(node->left, node->right);
+                stk.push(node->left);
+                stk.push(node->right);
+            }
+        }
+        return root;
+    }
+};
 ```
 
 [返回目录](#00)
