@@ -579,21 +579,26 @@ public:
 
 **迭代法**
 
-```python
-class Solution:
-    def isSymmetric(self, root: TreeNode) -> bool:
-        if not root:
-            return True
-        dq = collections.deque([(root.left, root.right)])
-        while dq:
-            l, r = dq.popleft()
-            if l and r and l.val == r.val:
-                dq.extend([(l.right, r.left), (l.left, r.right)])
-            elif l is r:
-                continue
-            else:
-                return False
-        return True
+```cpp
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        if (!root) return true;
+        stack<vector<TreeNode*>> stk({vector<TreeNode*>({root->left, root->right})});
+
+        while(!stk.empty()) {
+            TreeNode *p = stk.top()[0], *q = stk.top()[1];
+            stk.pop();
+            if (p && q && p->val == q->val) {
+                stk.push({p->left, q->right});
+                stk.push({p->right, q->left});
+            } else if (p == q) {
+                continue;
+            } else return false;
+        }
+        return true;
+    }
+};
 ```
 
 [返回目录](#00)
