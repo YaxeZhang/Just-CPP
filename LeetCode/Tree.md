@@ -289,24 +289,56 @@ return its level order traversal as:
 ---
 
 ### Python Solution
-**分析：** 分层存储，每次输出当层并且将下一层的在赋值到这里。
+**分析：** 分层存储，每次输出当层并且将下一层的在赋值到这里。两种做法：BFS 和 DFS 都在下文给出，但 DFS 的做法不推荐，接下来的两道类似的题不给出DFS的做法
 
-```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution { // bfs的做法
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
 
-class Solution:
-    def levelOrder(self, root: TreeNode) -> List[List[int]]:
-        res = []
-        if root:
-            level = [root]
-            while level:
-                res.append([node.val for node in level])
-                level = [kid for node in level for kid in (node.left, node.right) if kid]
-        return res
+        queue<TreeNode*> level({root});
+
+        while (!level.empty()) {
+            int len = level.size();
+            vector<int> tmp;
+            for (int i = 0; i < len; i++) {
+                TreeNode *node = level.front();
+                level.pop();
+                tmp.push_back(node->val);
+                if (node->left) level.push(node->left);
+                if (node->right) level.push(node->right);
+            }
+            res.push_back(tmp);
+        }
+        return res;
+    }
+};
+```
+
+```cpp
+class Solution { // dfs递归的做法 没有bfs直观
+private:
+    vector<vector<int>> ret;
+
+    void buildVector(TreeNode *root, int depth)
+    {
+        if(root == NULL) return;
+        if(ret.size() == depth)
+            ret.push_back(vector<int>());
+
+        ret[depth].push_back(root->val);
+        buildVector(root->left, depth + 1);
+        buildVector(root->right, depth + 1);
+    }
+
+public:
+    vector<vector<int> > levelOrder(TreeNode *root) {
+        buildVector(root, 0);
+        return ret;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -341,21 +373,30 @@ return its bottom-up level order traversal as:
 **分析：** 分层存储，每次输出当层并且将下一层的在赋值到这里。
 
 ```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+class Solution {
+public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
 
-class Solution:
-    def levelOrderBottom(self, root: TreeNode) -> List[List[int]]:
-        res = []
-        if root:
-            level = [root]
-            while level:
-                res.append([node.val for node in level])
-                level = [kid for node in level for kid in (node.left, node.right) if kid]
-        return res[::-1]
+        queue<TreeNode*> level({root});
+
+        while (!level.empty()) {
+            int len = level.size();
+            vector<int> tmp;
+            for (int i = 0; i < len; i++) {
+                TreeNode *node = level.front();
+                level.pop();
+                tmp.push_back(node->val);
+                if (node->left) level.push(node->left);
+                if (node->right) level.push(node->right);
+            }
+            res.push_back(tmp);
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -390,23 +431,32 @@ return its zigzag level order traversal as:
 **分析：** 分层存储，每次输出当层并且将下一层的在赋值到这里。
 
 ```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+class Solution {
+public:
+    vector<vector<int>> zigzagLevelOrder(TreeNode* root) {
+        vector<vector<int>> res;
+        if (!root) return res;
 
-class Solution:
-    def zigzagLevelOrder(self, root: TreeNode) -> List[List[int]]:
-        res = []
-        if root:
-            level = [root]
-            flag = 1
-            while level:
-                res.append([node.val for node in level][::flag])
-                level = [kid for node in level for kid in (node.left, node.right) if kid]
-                flag *= -1
-        return res
+        queue<TreeNode*> level({root});
+        int flag = 1;
+
+        while (!level.empty()) {
+            int len = level.size();
+            vector<int> tmp;
+            for (int i = 0; i < len; i++) {
+                TreeNode *node = level.front();
+                level.pop();
+                tmp.push_back(node->val);
+                if (node->left) level.push(node->left);
+                if (node->right) level.push(node->right);
+            }
+            if (flag == -1) reverse(tmp.begin(), tmp.end());
+            res.push_back(tmp);
+            flag *= -1;
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
