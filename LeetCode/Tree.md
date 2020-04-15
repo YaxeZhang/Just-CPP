@@ -1071,23 +1071,28 @@ public:
 
 **DFS**
 
-```Python
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        ans = 0
-        if not root:
-            return 0
-        DFS = [] # stack
-        DFS.append((root,1))
-        while DFS:
-            root, depth = DFS.pop()
-            if depth > ans:
-                ans = depth
-            if root.left:
-                DFS.append((root.left, depth + 1))
-            if root.right:
-                DFS.append((root.right, depth + 1))
-        return ans
+```cpp
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root) return 0;
+
+        int res = 0;
+        stack<pair<TreeNode*, int>> stk({pair<TreeNode*, int>({root, 1})});
+        while (!stk.empty()) {
+            TreeNode *node = stk.top().first;
+            int depth = stk.top().second;
+            stk.pop();
+
+            if (depth > res) res = depth;
+            if (node->left)
+                stk.push({node->left, depth + 1});
+            if (node->right)
+                stk.push({node->right, depth + 1});
+        }
+        return res;
+    }
+};
 ```
 
 **BFS**
