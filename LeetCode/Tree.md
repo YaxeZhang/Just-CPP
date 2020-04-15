@@ -1061,18 +1061,14 @@ return its depth = 3.
 ### Python Solution
 **分析：** 递归和迭代法。推荐递归。
 
-```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        return max(self.maxDepth(root.right), self.maxDepth(root.left)) + 1
+```cpp
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root) return 0;
+        return 1 + max(maxDepth(root->left), maxDepth(root->right));
+    }
+};
 ```
 
 **DFS**
@@ -1098,23 +1094,29 @@ class Solution:
 
 **BFS**
 
-```Python
-class Solution:
-    def maxDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        dq = collections.deque([root])
-        depth = 0
-        while dq:
-            len_dq = len(dq)
-            for _ in range(len_dq):
-                node = dq.popleft()
-                if node.left:
-                    dq.append(node.left)
-                if node.right:
-                    dq.append(node.right)
-            depth += 1
-        return depth
+```cpp
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        if (!root) return 0;
+
+        int res = 0;
+        queue<TreeNode*> q({root});
+
+        while (!q.empty()) {
+            res++;
+            for (int i = 0, n = q.size(); i < n; i++) {
+                TreeNode *node = q.front();
+                q.pop();
+                if (node->left)
+                    q.push(node->left);
+                if (node->right)
+                    q.push(node->right);
+            }
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1436,23 +1438,19 @@ You need to merge them into a new binary tree. The merge rule is that if two nod
 ### Python Solution
 **分析：** 递归的做法比较简单，迭代的做法待补充。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def mergeTrees(self, t1: TreeNode, t2: TreeNode) -> TreeNode:
-        if t1 and t2:
-            t1.val += t2.val
-            t1.left = self.mergeTrees(t1.left, t2.left)
-            t1.right = self.mergeTrees(t1.right, t2.right)
-            return t1
-        else:
-            return t1 or t2
+```cpp
+class Solution {
+public:
+    TreeNode* mergeTrees(TreeNode* t1, TreeNode* t2) {
+        if (t1 && t2) {
+            t1->val += t2->val;
+            t1->left = mergeTrees(t1->left, t2->left);
+            t1->right = mergeTrees(t1->right, t2->right);
+            return t1;
+        }
+        return t1 ? t1 : t2;
+    }
+};
 ```
 
 [返回目录](#00)
