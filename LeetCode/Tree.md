@@ -999,7 +999,7 @@ public:
 
 **迭代法**
 
-```python
+```cpp
 class Solution {
 public:
     int minDepth(TreeNode* root) {
@@ -1226,19 +1226,21 @@ The maximum depth is the number of nodes along the longest path from the root no
 ### Python Solution
 **分析：** 其实和二叉树的最大深度类似，只是多加了个循环。
 
-```python
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, children):
-        self.val = val
-        self.children = children
-"""
-class Solution(object):
-    def maxDepth(self, root):
-        if not root: return 0
-        if not root.children: return 1
-        return max(self.maxDepth(node) for node in root.children) + 1  
+```cpp
+class Solution {
+public:
+    int maxDepth(Node* root) {
+        if (!root) return 0;
+        int depth = 0;
+
+        for (auto chd : root->children) {
+            int cdepth = maxDepth(chd);
+            if (cdepth > depth)
+                depth = cdepth;
+        }
+        return depth + 1;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1275,26 +1277,23 @@ Return false.
 ### Python Solution
 **分析：**
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    int depth(TreeNode* root) {
+        if (!root) return 0;
+        int l = depth(root->left);
+        int r = depth(root->right);
+        if (l == -1 || r == -1 || abs(l - r) > 1)
+            return -1;
+        return 1 + max(l, r);
+    }
 
-class Solution(object):
-    def isBalanced(self, root):
-
-        def check(root):
-            if not root: return 0
-            left = check(root.left)
-            right = check(root.right)
-            if left == -1 or right == -1 or abs(left - right) > 1:
-                return -1
-            return max(left, right) + 1
-
-        return check(root) != -1
+public:
+    bool isBalanced(TreeNode* root) {
+        return depth(root) != -1;
+    }
+};
 ```
 
 [返回目录](#00)
