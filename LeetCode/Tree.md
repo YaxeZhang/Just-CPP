@@ -983,48 +983,46 @@ return its minimum depth = 2.
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def minDepth(self, root):
-        if not root: return 0
-        d = list(map(self.minDepth, (root.left, root.right)))
-        return 1 + (min(d) or max(d))
-
-class Solution:
-    def minDepth(self, root):
-        if not root:
-            return 0
-        if not root.left:
-            return self.minDepth(root.right) + 1
-        if not root.right:
-            return self.minDepth(root.left) + 1
-        return 1 + min(self.minDepth(root.right), self.minDepth(root.left))
+```cpp
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+        if (!root->left)
+            return minDepth(root->right) + 1;
+        if (!root->right)
+            return minDepth(root->left) + 1;
+        return 1 + min(minDepth(root->left), minDepth(root->right));
+    }
+};
 ```
 
 **迭代法**
 
 ```python
-class Solution:
-    def minDepth(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        stack, res = [(root, 1)], float('inf')
-        while stack:
-            node, depth = stack.pop()
-            if not node.left and not node.right:
-                res = min(res, depth)
-            if node.left:
-                stack.append((node.left, depth + 1))
-            if node.right:
-                stack.append((node.right, depth + 1))
-        return res
+class Solution {
+public:
+    int minDepth(TreeNode* root) {
+        if (!root) return 0;
+        queue<TreeNode*> q({root});
+        int res = 0;
+
+        while (!q.empty()) {
+            res++;
+            for (int i = 0, len = q.size(); i < len; i++) {
+                TreeNode *node = q.front();
+                q.pop();
+                if (!node->left && !node->right)
+                    return res;
+                if (node->left)
+                    q.push(node->left);
+                if (node->right)
+                    q.push(node->right);
+            }
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
