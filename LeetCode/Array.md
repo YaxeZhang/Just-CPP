@@ -1294,17 +1294,23 @@ Output: [24,12,8,6]
 ### Python Solution
 **分析：** 剑指 offer 里一样的题目，重点在于分解步骤，左边乘积乘以 1 乘以右边乘积。
 
-```python
-class Solution:
-    def productExceptSelf(self, nums: List[int]) -> List[int]:
-        res = [1] * len(nums)
-        for i in range(1, len(nums)):
-            res[i] = nums[i-1] * res[i-1]
-        tmp = 1
-        for j in range(len(nums)-2, -1, -1):
-            tmp *= nums[j+1]
-            res[j] *= tmp
-        return res
+```cpp
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
+        int len = nums.size(), tmp = 1;
+        vector<int> res(len, 1);
+        
+        for (int i = 1; i < len; i++)
+            res[i] = res[i - 1] * nums[i - 1];
+        
+        for (int i = len - 2; i >= 0; i--) {
+            tmp *= nums[i + 1];
+            res[i] *= tmp;
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
