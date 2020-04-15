@@ -1478,27 +1478,34 @@ Explanation:
 ---
 
 ### Python Solution
-**分析：** 考察的是 BST 。
+**分析：** 考察的是二叉树的层次遍历
 
 **BST**
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> res;
 
-class Solution:
-    def rightSideView(self, root: TreeNode) -> List[int]:
-        res = []
-        if root:
-            level = [root]
-            while level:
-                res.append(level[-1].val)
-                level = [leaf for node in level for leaf in (node.left, node.right) if leaf]
-        return res
+        if (!root) return res;
+
+        queue<TreeNode*> q({root});
+        while (!q.empty()) {
+            for (int i = 0, len = q.size(); i < len; i++) {
+                TreeNode *node = q.front();
+                q.pop();
+                if (node->left)
+                    q.push(node->left);
+                if (node->right)
+                    q.push(node->right);
+                if (i == len - 1)
+                    res.push_back(node->val);
+            }
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
