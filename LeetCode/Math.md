@@ -22,9 +22,9 @@
  - [18. 4Sum](#18-4sum)
  - [611. Valid Triangle Number](#611-valid-triangle-number)
 ## 很少考		
- - [231	Power of Two]
- - [326	Power of Three]
- - [342	Power of Four]
+ - [231. Power of Two](#231-power-of-two)
+ - [326. Power of Three](#326-power-of-three)
+ - [342. Power of Four](#342-power-of-four)
  - [372	Super Pow]
  - [233. Number of Digit One](#233-number-of-digit-one)
  - [319	Bulb Switcher]
@@ -686,6 +686,118 @@ class Solution:
                 else:
                     a += 1
         return res
+```
+
+[返回目录](#00)
+
+## 231. Power of Two
+
+Given an integer, write a function to determine if it is a power of two.
+
+给定一个整数，编写一个函数以确定它是否为2的幂。
+
+**Example**
+
+```
+Example 1:
+Input: 1
+Output: true 
+Explanation: 20 = 1
+
+Example 2:
+Input: 16
+Output: true
+Explanation: 24 = 16
+
+Example 3:
+Input: 218
+Output: false
+```
+
+---
+
+### Python Solution
+**分析：** 二进制位运算技巧。
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        return n > 0 && !(n & (n - 1));
+    }
+};
+```
+
+[返回目录](#00)
+
+## 326. Power of Three
+
+Given an integer, write a function to determine if it is a power of three.
+
+给定一个整数，编写一个函数以确定它是否为三的幂。
+
+**Example**
+
+```
+Example 1:
+Input: 27
+Output: true
+
+Example 2:
+Input: 0
+Output: false
+
+Example 3:
+Input: 9
+Output: true
+```
+
+---
+
+### Python Solution
+**分析：** 3的幂有什么方法呢？ 3的19次方是INT_MAX里最大的次方了，所以这是真O(1)的方法哈哈哈哈哈
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfThree(int n) {
+        return n > 0 && !((int)pow(3, 19) % n);
+    }
+};
+```
+
+[返回目录](#00)
+
+## 342. Power of Four
+
+Given an integer (signed 32 bits), write a function to check whether it is a power of 4.
+
+给定一个整数（带符号的32位），编写一个函数检查其是否为4的幂。
+
+**Example**
+
+```
+Example 1:
+Input: 16
+Output: true
+
+Example 2:
+Input: 5
+Output: false
+```
+
+---
+
+### Python Solution
+**分析：** 二进制位运算技巧。4的幂余3 剩1
+
+```cpp
+class Solution {
+public:
+    bool isPowerOfFour(int n) {
+        return n > 0 && !(n & (n - 1)) && n % 3 == 1;
+    }
+};
 ```
 
 [返回目录](#00)
