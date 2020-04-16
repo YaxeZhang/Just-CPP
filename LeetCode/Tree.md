@@ -698,40 +698,57 @@ Explanation: All root-to-leaf paths are: 1->2->5, 1->3
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    vector<string> res;
+    
+    void dfs(TreeNode* root, string s) {
+        if (!root->left && !root->right)
+            res.push_back(s);
+        if (root->left)
+            dfs(root->left, s + "->" + to_string(root->left->val));
+        if (root->right)
+            dfs(root->right, s + "->" + to_string(root->right->val));
+    }
 
-class Solution:
-    def binaryTreePaths(self, root):
-        if not root:
-            return []
-        return [str(root.val) + '->' + path
-                for kid in (root.left, root.right) if kid
-                for path in self.binaryTreePaths(kid)] or [str(root.val)]
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        if (!root) return res;
+        
+        dfs(root, to_string(root->val));
+        return res;
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def binaryTreePaths(self, root: TreeNode) -> List[str]:
-        if not root:
-            return []
-        paths, stack = [], [(root, str(root.val))]
-        while stack:
-            node, path = stack.pop()
-            if not node.left and not node.right:
-                paths.append(path)
-            if node.left:
-                stack.append((node.left, path + '->' + str(node.left.val)))
-            if node.right:
-                stack.append((node.right, path + '->' + str(node.right.val)))
-        return paths
+```cpp
+class Solution {
+public:
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> res;
+        if (!root) return res;
+        
+        stack<pair<TreeNode*, string>> stk;
+        stk.push({root, to_string(root->val)});
+        
+        while (!stk.empty()) {
+            TreeNode* node = stk.top().first;
+            string tmp = stk.top().second;
+            stk.pop();
+            
+            if (!node->left && !node->right)
+                res.push_back(tmp);
+            if (node->left)
+                stk.push({node->left, tmp + "->" + to_string(node->left->val)});
+            if (node->right)
+                stk.push({node->right, tmp + "->" + to_string(node->right->val)});
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -762,40 +779,45 @@ return true, as there exist a root-to-leaf path 5->4->11->2 which sum is 22.
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
-
-class Solution:
-    def hasPathSum(self, root, sum):
-        if not root:
-            return False
-        if not root.left and not root.right and root.val == sum:
-            return True
-        return self.hasPathSum(root.left, sum - root.val) or self.hasPathSum(root.right, sum - root.val)
+```cpp
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if (!root)
+            return false;
+        if (!root->left && !root->right && root->val == sum)
+            return true;
+        else return hasPathSum(root->left, sum - root->val)
+                 || hasPathSum(root->right, sum - root->val);
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def hasPathSum(self, root, sum):
-        if not root:
-            return False
-        stack = [(root, root.val)]
-        while stack:
-            node, cur = stack.pop()
-            if not node.left and not node.right and cur == sum:
-                return True
-            if node.left:
-                stack.append((node.left, cur + node.left.val))
-            if node.right:
-                stack.append((node.right, cur + node.right.val))
-        return False
+```cpp
+class Solution {
+public:
+    bool hasPathSum(TreeNode* root, int sum) {
+        if (!root)
+            return false;
+
+        stack<pair<TreeNode*, int>> stk({pair<TreeNode*, int>({root, root->val})});
+        while (!stk.empty()) {
+            TreeNode *node = stk.top().first;
+            int val = stk.top().second;
+            stk.pop();
+
+            if (!node->left && !node->right && val == sum)
+                return true;
+            if (node->left)
+                stk.push({node->left, val + node->left->val});
+            if (node->right)
+                stk.push({node->right, val + node->right->val});
+        }
+        return false;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -917,42 +939,56 @@ Therefore, sum = 495 + 491 + 40 = 1026.
 ### Python Solution
 **分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    int res;
 
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
-        def f(root):
-            if not root:
-                return []
-            return [str(root.val) + path
-                    for kid in (root.left, root.right) if kid
-                    for path in f(kid)] or [str(root.val)]
-        return sum(map(int,f(root)))
+    void dfs(TreeNode* root, int val) {
+        val += root->val;
+        if (!root->left && !root->right)
+            res += val;
+        if (root->left)
+            dfs(root->left, val);
+        if (root->right)
+            dfs(root->right, val);
+    }
+
+public:
+    int sumNumbers(TreeNode* root) {
+        if (!root) return 0;
+        dfs(root, 0);
+        return res;
+    }
+};
 ```
 
 **迭代法**
 
-```python
-class Solution:
-    def sumNumbers(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        stack, res = [(root, str(root.val))], 0
-        while stack:
-            node, st = stack.pop()
-            if not node.left and not node.right:
-                res += int(st)
-            if node.left:
-                stack.append((node.left, st + str(node.left.val)))
-            if node.right:
-                stack.append((node.right, st + str(node.right.val)))
-        return res
+```cpp
+class Solution {
+public:
+    int sumNumbers(TreeNode* root) {
+        if (!root)
+            return 0;
+
+        int res = 0;
+        stack<pair<TreeNode*, int>> stk({pair<TreeNode*, int>({root, root->val})});
+        while (!stk.empty()) {
+            TreeNode *node = stk.top().first;
+            int val = stk.top().second;
+            stk.pop();
+
+            if (!node->left && !node->right)
+                res += val;
+            if (node->left)
+                stk.push({node->left, val * 10 + node->left->val});
+            if (node->right)
+                stk.push({node->right, val * 10 + node->right->val});
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1191,28 +1227,39 @@ Explanation:The maximum width existing in the fourth level with the length 8 (6,
 ### Python Solution
 **分析：** 其实是一道非常简单的题，不过要注意的是 pos 的值的递进。
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        if (!root) return 0;
+        
+        unsigned long res = 0, len, l, r;
+        queue<pair<TreeNode*, unsigned long>> q;
+        q.push({root, 0});
+        
+        while (!q.empty()) {
+            len = q.size();
+            for (int i = 0; i < len; i++) {
+                auto node = q.front().first;
+                auto pos = q.front().second;
+                q.pop();
+                
+                if (node->left)
+                    q.push({node->left, pos * 2});
+                if (node->right)
+                    q.push({node->right, pos * 2 + 1});
 
-class Solution:
-    def widthOfBinaryTree(self, root: TreeNode) -> int:
-        if not root: return 0
-        stack, res = [(root, 0, 0)], []
-        while stack:
-            node, depth, pos = stack.pop()
-            if len(res) < depth + 1:
-                res.append([])
-            res[depth].append(pos)
-            if node.left:
-                stack.append((node.left, depth + 1, pos * 2))
-            if node.right:
-                stack.append((node.right, depth + 1, pos * 2 + 1))
-        return max([max(res[i]) - min(res[i]) for i in range(len(res))]) + 1
+                if (i == 0)
+                    l = pos;
+                if (i == len - 1) {
+                    r = pos;
+                    res = max(res, r - l);
+                }
+            }
+        }
+        return res + 1;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -1342,26 +1389,25 @@ Output: 42
 ### Python Solution
 **分析：**
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    int res = INT_MIN;
 
-class Solution:
-    def maxPathSum(self, root: TreeNode) -> int:
-        self.res = float('-inf')
-        def dfs(root):
-            if not root: return 0
-            left = max(0, dfs(root.left))
-            right = max(0, dfs(root.right))
-            val = root.val + left + right
-            self.res = max(self.res, val)
-            return root.val + max(left, right)
-        dfs(root)
-        return self.res
+    int dfs(TreeNode* root) {
+        if (!root) return 0;
+        int l = max(0, dfs(root->left));
+        int r = max(0, dfs(root->right));
+        res = max(res, root->val + l + r);
+        return root->val + max(l, r);
+    }
+
+public:
+    int maxPathSum(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -2743,15 +2789,21 @@ Output: false
 ### Python Solution
 **分析：** 利用了二叉树的一个性质，空结点的个数比非空结点的个数多一个。
 
-```python
-class Solution(object):
-    def isValidSerialization(self, preorder):
-        s = 1
-        for is_null in map(lambda c: c == '#', preorder.split(',')):
-            if not s:
-                return False     
-            s = s - 1 if is_null else s + 1              
-        return not s
+```cpp
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        int st = 1, pos = 0, len = preorder.size();
+        while (pos < len && st != 0) {
+            if (preorder[pos] == '#')
+                st -= 1;
+            else st += 1;
+            
+            while(pos < len && preorder[pos++] != ',');
+        }
+        return pos == len && st == 0;
+    }
+};
 ```
 
 [返回目录](#00)
