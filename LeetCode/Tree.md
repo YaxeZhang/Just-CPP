@@ -1743,60 +1743,25 @@ Explanation: The LCA of nodes 5 and 4 is 5, since a node can be a descendant of 
 ---
 
 ### Python Solution
-**分析：** 分为两个解法，一种是递归的做法，另外一种是迭代的做法。
+**分析：** 推荐递归的做法，这道题用来理解递归自底而上的思想比较好。
 
-```python
-class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        if root == None:
-            return None
-        if root == p or root == q:
-            return root
-        m = self.lowestCommonAncestor(root.left,p,q)
-        n = self.lowestCommonAncestor(root.right,p,q)
-        if(m and n):
-            return root
-        elif m:
-            return m
-        else:
-            return n
-```
+```cpp
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root) return nullptr;
 
-**可简化为**
+        if (root == p || root == q)
+            return root;
+        
+        auto m = lowestCommonAncestor(root->left, p, q);
+        auto n = lowestCommonAncestor(root->right, p, q);
 
-```python
-class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        if root in (None, p, q): return root
-        left, right = (self.lowestCommonAncestor(kid, p, q)
-                       for kid in (root.left, root.right))
-        return root if left and right else left or right
-```
-
-**迭代法**
-
-```python
-class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
-        parents = {root: None}
-        stack = [root]
-        while p not in parents or q not in parents:
-            node = stack.pop()
-            if node.left:
-                parents[node.left] = node
-                stack.append(node.left)
-            if node.right:
-                parents[node.right] = node
-                stack.append(node.right)
-
-        ancestors = set()
-        while p:
-            ancestors.add(p)
-            p = parents[p]
-
-        while q not in ancestors:
-            q = parents[q]
-        return q
+        if (m && n) {
+            return root;
+        } else return m ? m : n;
+    }
+};
 ```
 
 [返回目录](#00)
