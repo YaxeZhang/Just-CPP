@@ -2399,19 +2399,26 @@ Return the following binary tree:
 ### Python Solution
 **分析：** 和下面一题的思路一样，复杂写法不再赘述，看下一题的分析即可。
 
-```python
-class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-        def predfs(stop):
-            if preorder and inorder[-1] != stop:
-                root = TreeNode(preorder.pop())
-                root.left = predfs(root.val)
-                inorder.pop()
-                root.right = predfs(stop)
-                return root
-        preorder.reverse()
-        inorder.reverse()
-        return predfs(None)
+```cpp
+class Solution {
+private:
+    int prepos = 0, inpos = 0;
+
+    TreeNode* dfs(vector<int>& preorder, vector<int>& inorder, int stop) {
+        if (prepos == preorder.size() || inorder[inpos] == stop)
+            return nullptr;
+        TreeNode* root = new TreeNode(preorder[prepos++]);
+        root->left = dfs(preorder, inorder, root->val);
+        inpos++;
+        root->right = dfs(preorder, inorder, stop);
+        return root;
+    }
+
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return dfs(preorder, inorder, INT_MAX);
+    }
+};
 ```
 
 [返回目录](#00)
@@ -2444,38 +2451,28 @@ Return the following binary tree:
 ---
 
 ### Python Solution
-**分析：** 两种都非常好理解，第一种是找到根节点，然后将 inorder 查分为两半继续寻找，问题在于如何找到 根节点在 inorder 的位置，下面第一种解法有点傻，更高效的是建立一个哈希表，占用 O(n) 的空间、查询时间为O(1)。第二种解法呢则非常聪明，不用找根节点的位置，构建 root.right 时每次都调用的是 postorder 最后一个元素，终点是 root.val 。构建 root.right 的时候终点是 None。
+**分析：** 这种解法非常聪明，不用找根节点的位置，构建 root.right 时每次都调用的是 postorder 最后一个元素，终点是 root.val 。构建 root.right 的时候终点是 None。
 
-```python
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+private:
+    int inpos, postpos;
 
-class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        if inorder:
-            ind = inorder.index(postorder.pop())
-            root = TreeNode(inorder[ind])
-            root.right = self.buildTree(inorder[ind+1:], postorder)
-            root.left = self.buildTree(inorder[:ind], postorder)
-            return root
-```
-
-**easier**
-
-```python
-class Solution:
-    def buildTree(self, inorder: List[int], postorder: List[int]) -> TreeNode:
-        def postdfs(stop):
-            if postorder and inorder[-1] != stop:
-                root = TreeNode(postorder.pop())
-                root.right = postdfs(root.val)
-                inorder.pop()
-                root.left = postdfs(stop)
-                return root
-        return postdfs(None)
+    TreeNode* dfs(vector<int>& inorder, vector<int>& postorder, int stop) {
+        if (postpos < 0 || inorder[inpos] == stop)
+            return nullptr;
+        TreeNode* root = new TreeNode(postorder[postpos--]);
+        root->right = dfs(inorder, postorder, root->val);
+        inpos--;
+        root->left = dfs(inorder, postorder, stop);
+        return root;
+    }
+public:
+    TreeNode* buildTree(vector<int>& inorder, vector<int>& postorder) {
+        inpos = inorder.size() - 1, postpos = postorder.size() - 1;
+        return dfs(inorder, postorder, INT_MAX);
+    }
+};
 ```
 
 [返回目录](#00)
