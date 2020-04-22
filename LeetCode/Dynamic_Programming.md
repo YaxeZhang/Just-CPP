@@ -727,20 +727,27 @@ Explanation: Because the path 1→3→1→1→1 minimizes the sum.
 
 **一维的解法**
 
-```python
-class Solution:
-    def minPathSum(self, grid: List[List[int]]) -> int:
-        m, n = len(grid), len(grid[0])
-        dp = grid[0][:]
-        for i in range(1, n):
-            dp[i] += dp[i-1]
-        for i in range(1, m):
-            for j in range(n):
-                if j > 0:
-                    dp[j] = grid[i][j] + min(dp[j], dp[j-1])
-                else:
-                    dp[j] = grid[i][j] + dp[j]
-        return dp[-1]
+```cpp
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int m = grid.size(), n = grid[0].size();
+        vector<int> dp(grid[0].begin(), grid[0].end());
+
+        for (int j = 1; j < n; j++)
+            dp[j] += dp[j - 1];
+        
+        for (int i = 1; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (j > 0)
+                    dp[j] = grid[i][j] + min(dp[j - 1], dp[j]);
+                else
+                    dp[j] += grid[i][j];
+            }
+        }
+        return dp[n - 1];
+    }
+};
 ```
 
 [返回目录](#00)
