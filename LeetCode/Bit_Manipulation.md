@@ -165,15 +165,19 @@ Output: 4
 ### Python Solution
 **分析：** 只要找到两端的公共部分即可。
 
-```python
-class Solution:
-    def rangeBitwiseAnd(self, m: int, n: int) -> int:
-        shift = 0
-        while m and m != n:   # NOTE: break when m == 0
-            m >>= 1
-            n >>= 1
-            shift += 1
-        return m << shift
+```cpp
+class Solution {
+public:
+    int rangeBitwiseAnd(int m, int n) {
+        int shift = 0;
+        while (m && m != n) {
+            m >>= 1;
+            n >>= 1;
+            shift++;
+        }
+        return m << shift;
+    }
+};
 ```
 
 [返回目录](#00)
