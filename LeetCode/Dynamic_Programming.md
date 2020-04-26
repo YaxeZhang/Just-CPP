@@ -920,20 +920,26 @@ Explanation: There is no such common subsequence, so the result is 0.
 ### Python Solution
 **分析：** 和上一题差不多，字符串的动态规划解题思路都差不多，无非就是相等递进，替换，删除，插入这样。本题里只涉及相等递进，取两种情况最大值。
 
-```python
-class Solution:
-    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
-        m, n = len(text1), len(text2)
-        dp = [0] * (n+1)
-        for i in range(m):
-            cur = [0] * (n+1)
-            for j in range(n):
-                if text1[i] == text2[j]:
-                    cur[j+1] = dp[j] + 1
-                else:
-                    cur[j+1] = max(cur[j], dp[j+1])
-            dp = cur
-        return dp[-1]
+```cpp
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int m = text1.size(), n = text2.size();
+        vector<int> dp(n + 1, 0);
+
+        for (int i = 0; i < m; i++) {
+            vector<int> tmp(n + 1, 0);
+            for (int j = 0; j < n; j++) {
+                if (text1[i] == text2[j])
+                    tmp[j + 1] = dp[j] + 1;
+                else
+                    tmp[j + 1] = max(tmp[j], dp[j + 1]);
+            }
+            dp = tmp;
+        }
+        return dp[n];
+    }
+};
 ```
 
 [返回目录](#00)
