@@ -2034,31 +2034,31 @@ Output: 3
 ---
 
 ### Python Solution
-**分析：**
+**分析：** 利用了中序遍历的性质。
 
 
 **迭代法**
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        if (!root) return 0;
 
-class Solution:
-    def kthSmallest(self, root: TreeNode, k: int) -> int:
-        stack= []
-        while stack or root:
-            while root:
-                stack.append(root)
-                root = root.left
-            node = stack.pop()
-            k -= 1
-            if not k: return node.val
-            root = node.right
-        return None
+        stack<TreeNode*> stk;
+        while (!stk.empty() || root) {
+            while (root) {
+                stk.push(root);
+                root = root->left;
+            }
+            root = stk.top(), stk.pop();
+            if (!--k)
+                return root->val;
+            root = root->right;
+        }
+        return 0;
+    }
+};
 ```
 
 [返回目录](#00)
