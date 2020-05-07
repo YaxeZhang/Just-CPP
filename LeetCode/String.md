@@ -243,21 +243,34 @@ canConstruct("aa", "aab") -> true
 ---
 
 ### Python Solution
-**分析：** 一种是用 count，一种是用 Counter。
+**分析：** 一种是用 map，一种是针对确定字母只有26个用 vector。
 
-```python
-class Solution:
-   def canConstruct(self, ransomNote: str, magazine: str) -> bool:
-       for letter in set(ransomNote):
-           if ransomNote.count(letter) > magazine.count(letter):
-               return False
-       return True
+```cpp
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        unordered_map<char, int> mp;
+        for (auto& x: magazine) mp[x]++;
+        for (auto& x: ransomNote)
+            if (--mp[x] < 0) return false;
+        return true;
+    }
+};
 ```
 
-```python
-class Solution:
-    def canConstruct(self, ransomNote, magazine):
-        return not collections.Counter(ransomNote) - collections.Counter(magazine)
+```cpp
+class Solution {
+public:
+    bool canConstruct(string ransomNote, string magazine) {
+        vector<int> vec(26, 0);
+        for (int i = 0; i < magazine.size(); ++i)
+            ++vec[magazine[i] - 'a'];
+        for (int j = 0; j < ransomNote.size(); ++j)
+            if (--vec[ransomNote[j] - 'a'] < 0)
+                return false;
+        return true;
+    }
+};
 ```
 
 [返回目录](#00)
