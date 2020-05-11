@@ -311,27 +311,35 @@ Explanation: The square root of 8 is 2.82842..., and since
 ### Python Solution
 **分析：** 两种方法，一种是二分法，一种是牛顿迭代法。
 
-```python
-class Solution:
-    def mySqrt(self, x):
-        l, r = 0, x
-        while l <= r:
-            mid = l + (r-l)//2
-            if mid * mid <= x < (mid+1)*(mid+1):
-                return mid
-            elif x < mid * mid:
-                r = mid
-            else:
-                l = mid + 1
+```cpp
+class Solution {
+public:
+    int mySqrt(int x) {
+        if (x <= 1) return x;
+        
+        int lo = 0, hi = x, mid;
+        while (lo < hi) {
+            mid = lo + (hi - lo) / 2;
+            if (x / mid >= mid)
+                lo = mid + 1;
+            else
+                hi = mid;
+        }
+        return lo - 1;
+    }
+};
 ```
 
-```python
-class Solution:
-    def mySqrt(self, x: int) -> int:
-        r = x
-        while r*r > x:
-            r = (r + x//r) // 2
-        return r
+```cpp
+class Solution {
+public:
+    int mySqrt(int x) {
+        long long  res = x;
+        while (res * res > x)
+            res = (res + x / res) / 2;
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
