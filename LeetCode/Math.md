@@ -364,16 +364,22 @@ Explanation: 2-2 = 1/22 = 1/4 = 0.25
 ### Python Solution
 **分析：** 简单快速幂的求法。
 
-```python
-class Solution:
-    def myPow(self, x: float, n: int) -> float:
-        p, r = abs(n), 1
-        while p:
-            if p & 1:
-                r *= x
-            x *= x
-            p >>= 1
-        return r if n >= 0 else 1/r
+```cpp
+class Solution {
+public:
+    double myPow(double x, long long n) {
+        double res = 1;
+        long long p = n > 0 ? n : -n;
+        
+        while (p) {
+            if (p & 1)
+                res *= x;
+            x *= x;
+            p >>= 1;
+        }
+        return n > 0 ? res : 1 / res;
+    }
+};
 ```
 
 [返回目录](#00)
