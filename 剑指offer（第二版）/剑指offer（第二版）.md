@@ -928,65 +928,41 @@ class Solution:
 定义栈的数据结构，请在该类型中实现一个能够得到栈中所含最小元素的min函数（时间复杂度应为O（1））。
 #### 解法：
 
-```python
-class MinStack:
-
-    def __init__(self):
-        self.stack = []
-        self.stkmin = []
-
-    def push(self, x: int) -> None:
-        if not self.stkmin or self.getMin() > x:
-            self.stkmin.append(x)
-        else:
-            self.stkmin.append(self.getMin())
-        self.stack.append(x)
-
-    def pop(self) -> None:
-        if self.stack:
-            self.stkmin.pop()
-            return self.stack.pop()
-
-    def top(self) -> int:
-        if self.stack:
-            return self.stack[-1]
-
-    def getMin(self) -> int:
-        if self.stkmin:
-            return self.stkmin[-1]
-```
-
 **进阶牛逼版 O(1)空间复杂度 O(1)时间复杂度**
 
-```python
-class MinStack:
+```cpp
+class MinStack {
+public:
+    MinStack() { }
+    
+    void push(int x) {
+        if (m_stk.empty()) {
+            m_min = x;
+            m_stk.push(0);
+        } else {
+            m_stk.push(m_min - x);
+            m_min = m_min < x ? m_min : x;
+        }
+    }
+    
+    void pop() {
+        long x = m_stk.top();
+        if (x > 0) m_min += x;
+        m_stk.pop();
+    }
+    
+    int top() {
+        return m_stk.top() < 0 ? m_min - m_stk.top() : m_min;
+    }
+    
+    int getMin() {
+        return m_min;
+    }
 
-    def __init__(self):
-        self.stack = []
-        self.mins = 0
-
-    def push(self, x: int) -> None:
-        if not self.stack:
-            self.mins = x
-            self.stack.append(0)
-        else:
-            compare = x - self.mins
-            self.stack.append(compare)
-            self.mins = x if compare < 0 else self.mins            
-
-    def pop(self) -> None:
-        top1 = self.stack.pop()
-        if top1 < 0:
-            self.mins = self.mins - top1
-
-    def top(self) -> int:
-        if self.stack[-1] > 0:
-            return self.mins + self.stack[-1]
-        else:
-            return self.mins
-
-    def getMin(self) -> int:
-        return self.mins
+private:
+    stack<long> m_stk;
+    long m_min;
+};
 ```
 
 [回到目录](#00)
