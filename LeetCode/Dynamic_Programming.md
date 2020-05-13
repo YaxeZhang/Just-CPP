@@ -65,25 +65,16 @@ Explanation: There are two ways to climb to the top.
 ### Python Solution
 **分析：** 从简单到难理解动态规划，即利用前面的子问题的解求得后面问题的解。不递归调用，而只是存储子问题解并且通过状态转移来解决。
 
-```python
-class Solution:
-    def climbStairs(self, n: int) -> int:
-        if n <= 2:
-            return n
-        dp = [0] * n
-        dp[0], dp[1] = 1, 2
-        for i in range(2,n):
-            dp[i] = dp[i - 1] + dp[i- 2]
-        return dp[-1]
-```
-
-```python
-class Solution:
-    def climbStairs(self, n: int) -> int:
-        a, b = 1, 0
-        for _ in range(n + 1):
-            a, b = a + b, a
-        return b
+```cpp
+class Solution {
+public:
+    int climbStairs(int n) {
+        int a = 0, b = 1;
+        while (n--)
+            a = (b += a) - a;
+        return b;
+    }
+};
 ```
 
 [返回目录](#00)
