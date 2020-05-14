@@ -748,15 +748,23 @@ Explanation: The minimum number of jumps to reach the last index is 2.
 ### Python Solution
 **分析：** 虽然难度是 hard 但其实很简单。而且题目里说保证可以到达，约束条件就更少了。
 
-```python
-class Solution:
-    def jump(self, nums: List[int]) -> int:
-        tmp = [i + v for i, v in enumerate(nums)]
-        left = right = res = 0
-        while right < len(nums)-1:
-            left, right = right, max(tmp[left:right+1])
-            res += 1
-        return res
+```cpp
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int ans = 0, end = 0, n = nums.size() - 1, i = 0;
+        while( end <= n - 1 ) {
+            int new_end = end;
+            while( i <= n && i <= end ) {
+                new_end = max( new_end, nums[i] + i);
+                i++;
+            }
+            end = new_end;
+            ans++;
+        }
+        return ans;
+    }
+};
 ```
 
 [返回目录](#00)
