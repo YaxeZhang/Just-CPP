@@ -27,7 +27,7 @@
  - [334	Increasing Triplet Subsequence]
  - [128. Longest Consecutive Sequence](#128-longest-consecutive-sequence)
  - [164	Maximum Gap	Bucket]
- - [287	Find the Duplicate Number]
+ - [287. Find the Duplicate Number](#287-find-the-duplicate-number)
  - [135	Candy]
  - [330	Patching Array]
  - [78. Subsets](#78-subsets)
@@ -875,6 +875,50 @@ class Solution:
 
 [返回目录](#00)
 
+## 287. Find the Duplicate Number
+
+Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. Assume that there is only one duplicate number, find the duplicate one.
+
+给定一个包含n + 1个整数的数组，其中每个整数在1到n（包括1和n）之间，请证明必须存在至少一个重复的数字。 假定只有一个重复的数字，找到重复的一个。
+
+**Example**
+
+```
+Example 1:
+Input: [1,3,4,2,2]
+Output: 2
+
+Example 2:
+Input: [3,1,3,4,2]
+Output: 3
+```
+
+---
+
+### Python Solution
+**分析：** 弗洛伊德判断环的方法
+
+```cpp
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        int f = 0, s = 0;
+        while (f == 0 || f != s) {
+            f = nums[nums[f]];
+            s = nums[s];
+        }
+        f = 0;
+        while (f != s) {
+            f = nums[f];
+            s = nums[s];
+        }
+        return s;
+    }
+};
+```
+
+[返回目录](#00)
+
 ## 78. Subsets
 
 Given a set of distinct integers, nums, return all possible subsets (the power set).
@@ -1400,6 +1444,23 @@ class Solution:
             A[i] *= A[i - 1] or 1
             B[i] *= B[i - 1] or 1
         return max(A + B)
+```
+
+```cpp
+class Solution {
+public:
+    int maxProduct(vector<int>& nums) {
+        int res, c_max, c_min;
+        res = c_max = c_min = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums[i] < 0) swap(c_max, c_min);
+            c_max = max(c_max * nums[i], nums[i]);
+            c_min = min(c_min * nums[i], nums[i]);
+            res = max(res, c_max);
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
