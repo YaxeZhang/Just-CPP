@@ -11,7 +11,7 @@
  - [338. Counting Bits](#338-counting-bits)
  - [89    Gray Code]
  - [268. Missing Number](#268-missing-number)
- - [191    Number of 1 Bits]
+ - [191. Number of 1 Bits](#191-number-of-1-bits)
  - [190    Reverse Bits]
  - [260    Single Number III]
 
@@ -236,22 +236,35 @@ Output: [0,1,1,2,1,2]
 ### Python Solution
 **分析：** 第一种解法有点类似于找规律但是可以将大数分解为小的部分进行求解。第二种解法就是根据数的二进制表示了。
 
-```python
-class Solution:
-    def countBits(self, num: int) -> List[int]:
-      res = [0]
-      while len(res) <= num:
-          res += [i+1 for i in res]
-      return res[:num+1]
+```cpp
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> res(num + 1, 0);
+        int cur = 0, last = 1;
+
+        for (int i = 1; i < num + 1; i++) {
+            res[i] = res[cur++] + 1;
+            if (cur == last) {
+                cur = 0;
+                last = i + 1;
+            }
+        }
+        return res;
+    }
+};
 ```
 
-```python
-class Solution:
-    def countBits(self, num: int) -> List[int]:
-        ans = [0] * (num+1)
-        for i in range(1,num+1):
-            ans[i] = ans[i & (i-1)] + 1
-        return ans
+```cpp
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int> ret(num+1, 0);
+        for (int i = 1; i <= num; ++i)
+            ret[i] = ret[i&(i-1)] + 1;
+        return ret;
+    }
+};
 ```
 
 [返回目录](#00)
@@ -300,6 +313,49 @@ public:
         int n = nums.size(), res = n;
         for (int i = 0; i < n; i++)
             res += i - nums[i];
+        return res;
+    }
+};
+```
+
+[返回目录](#00)
+
+## 191. Number of 1 Bits
+
+Write a function that takes an unsigned integer and return the number of '1' bits it has (also known as the Hamming weight).
+
+编写一个函数，该函数采用无符号整数并返回其具有的'1'位的数量（也称为汉明权重）。
+
+**Example**
+
+```
+Example 1:
+
+Input: 11111111111111111111111111111101
+Output: 31
+Explanation: The input binary string 11111111111111111111111111111101 has a total of thirty one '1' bits.
+
+Example 2:
+
+Input: 00000000000000000000000010000000
+Output: 1
+Explanation: The input binary string 00000000000000000000000010000000 has a total of one '1' bit.
+```
+
+---
+
+### Python Solution
+**分析：** 难点在于怎么快速取到最后一位为1。
+
+```cpp
+class Solution {
+public:
+    int hammingWeight(uint32_t n) {
+        int res = 0;
+        while (n) {
+            res++;
+            n &= (n - 1);
+        }
         return res;
     }
 };
