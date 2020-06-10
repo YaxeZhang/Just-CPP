@@ -638,9 +638,11 @@ class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
         if (!root) return nullptr;
-        TreeNode *tmp = root->right;
-        root->right = invertTree(root->left);
-        root->left = invertTree(tmp);
+        
+        auto tmp = root->left;
+        root->left = invertTree(root->right);
+        root->right = invertTree(tmp);
+        
         return root;
     }
 };
@@ -652,11 +654,10 @@ public:
 class Solution {
 public:
     TreeNode* invertTree(TreeNode* root) {
-        stack<TreeNode*> stk;
-        stk.push(root);
+        stack<TreeNode*> stk({root});
 
         while (!stk.empty()) {
-            TreeNode* node = stk.top();
+            auto node = stk.top();
             stk.pop();
             if (node) {
                 swap(node->left, node->right);
