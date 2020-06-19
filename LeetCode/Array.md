@@ -544,17 +544,22 @@ Explanation: [0,1,3,5,6] means the researcher has 5 papers in total and each of 
 ### Python Solution
 **分析：** 延续上一道题，如果已经排好序，直接用二分法就可以了。
 
-```python
-class Solution:
-    def hIndex(self, citations: List[int]) -> int:
-        lo, hi = 0, len(citations)
-        while lo < hi:
-            mid = (lo + hi) // 2
-            if citations[~mid] > mid:
-                lo = mid + 1
-            else:
-                hi = mid
-        return lo
+```cpp
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int lo = 0, hi = citations.size();
+        
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (citations[citations.size() - mid - 1] > mid)
+                lo = mid + 1;
+            else
+                hi = mid;
+        }
+        return lo;
+    }
+};
 ```
 
 [返回目录](#00)
