@@ -1017,46 +1017,25 @@ Output: true
 ---
 
 ### Python Solution
-**分析：** 很容易想到我们如果先用 isalnum() 将字符或者数字选出来是不是就转换成了判断字符串是不是回文字符串的问题。那么我们用 Python 的列表推导式就可以 Pythonic 地解决这个要求。
+**分析：** 利用双指针一前一后进行判断是否相同只要 O(n) 时间复杂度和 O(1) 的空间复杂度，比之前更有效率了。但是列表 s 仍然会花费 O(n) 的空间，所以我们将双指针不再局限在筛选后的 list 上，而是在原来的字符串上就开始工作。一前一后逼近，每次移动后判断当前位是否为字符或者数字，然后进行比较。这样只对字符串进行了一次遍历，所以只用了 O(n) 的时间复杂度，而且空间复杂度为 O(1) 。
 
-```python
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        s = [i.lower() for i in s if i.isalpha() or i.isdigit()]
-        return s == s[::-1]
-```
+```cpp
+class Solution {
+public:
+    bool isPalindrome(string s) {
+        int i = 0, j = s.length() - 1;
 
-**进阶** 但实际上我们的构成新列表 s 的操作时间复杂度为 O(n)， 空间复杂度为 O(n)。之后的进行判断是否为回文字符串的操作话费相同，显得比较粗鲁。因此我们想能不能更优雅地解决判断回文字符串的要求。于是有了下面的代码：
+        while (i < j) {
+            while (i < j && !isalnum(s[i])) i++;
+            while (i < j && !isalnum(s[j])) j--;
 
-```python
-class Solution:
-    def isPalindrome(self, s: str) -> bool:
-        s = [i.lower() for i in s if i.isalnum()]
-        i, j = 0, len(s) - 1
-        while i < j:
-            if s[i] != s[j]:
-                return False
-            i += 1
-            j -= 1
-        return True
-```
+            if (tolower(s[i++]) != tolower(s[j--]))
+                return false;
+        }
 
-**再进阶** 利用双指针一前一后进行判断是否相同只要 O(n) 时间复杂度和 O(1) 的空间复杂度，比之前更有效率了。但是列表 s 仍然会花费 O(n) 的空间，所以我们将双指针不再局限在筛选后的 list 上，而是在原来的字符串上就开始工作。一前一后逼近，每次移动后判断当前位是否为字符或者数字，然后进行比较。这样只对字符串进行了一次遍历，所以只用了 O(n) 的时间复杂度，而且空间复杂度为 O(1) 。
-
-```python
-class Solution:
-    def isPalindrome(self, s):
-        i, j = 0, len(s) - 1
-        while i < j:
-            while not s[i].isalnum() and i < j:
-                i += 1
-            while not s[j].isalnum() and i < j:
-                j -= 1
-            if s[i].lower() != s[j].lower():
-                return 0
-            i += 1
-            j -= 1
-        return True
+        return true;
+    }
+};
 ```
 
 [返回目录](#00)
