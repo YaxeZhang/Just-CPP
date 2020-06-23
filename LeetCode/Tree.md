@@ -2341,31 +2341,42 @@ Output: 6
 ---
 
 ### Python Solution
-**分析：** 考验的思想应该是二分法，要充分利用完全二叉树的性质。
+**分析：** 考验的是层次遍历
 
-```python
-# Definition for a binary tree node.
-# class TreeNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.left = None
-#         self.right = None
+```cpp
+class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (!root) return 0;
 
-class Solution:
-    def countNodes(self, root: TreeNode) -> int:
-        if not root:
-            return 0
-        leftDepth = self.getDepth(root.left)
-        rightDepth = self.getDepth(root.right)
-        if leftDepth == rightDepth:
-            return pow(2, leftDepth) + self.countNodes(root.right)
-        else:
-            return pow(2, rightDepth) + self.countNodes(root.left)
+        vector<TreeNode*> level({root});
+        int depth = -1, pre;
+        while (!level.empty()) {
+            pre = level.size();
+            if (pre != pow(2, ++depth)) break;
+            vector<TreeNode*> tmp;
+            for (auto& node: level) {
+                if (node->left) tmp.push_back(node->left);
+                if (node->right) tmp.push_back(node->right);
+            }
+            level = tmp;
+        }
+        return pow(2, depth) + pre - 1;
+    }
+};
+```
 
-    def getDepth(self, root):
-        if not root:
-            return 0
-        return 1 + self.getDepth(root.left)
+```cpp
+class Solution { // 直观的简单理解
+public:
+    int countNodes(TreeNode* root) {
+        if(!root)
+            return 0;
+        if(!root->left && !root->right)
+            return 1;
+        return countNodes(root->left)+countNodes(root->right)+1;
+    }
+};
 ```
 
 [返回目录](#00)
