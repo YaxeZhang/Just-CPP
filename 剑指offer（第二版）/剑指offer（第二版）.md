@@ -195,18 +195,23 @@ public:
 
 **还可以递归实现：**
 
-```python
-class Solution:
-    def printListReversingly(self, head):
-        self.res = []
+```cpp
+class Solution {
+public:
+    vector<int> reversePrint(ListNode* head) {
+        dfs(head);
+        return res;
+    }
 
-        def helper(p):
-            if p:
-                helper(p.next)
-                self.res.append(p.val)
+private:
+    vector<int> res;
+    void dfs(ListNode* root) {
+        if (!root) return;
 
-        helper(head)
-        return self.res
+        dfs(root->next);
+        res.push_back(root->val);
+    }
+};
 ```
 
 [回到目录](#00)
