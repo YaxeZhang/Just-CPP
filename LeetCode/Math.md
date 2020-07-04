@@ -1007,28 +1007,25 @@ Explanation: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12 is the sequence of the first 10 ugly
 ---
 
 ### Python Solution
-**分析：** 第一种方案是一个一个生成丑数，计算到第 n 个即可，第二种方案是预运算之后进行排序，返回第 n 个。
-面试中第二种会比较亮眼但是需要说明 32 20 14 的由来。
+**分析：** 一个一个生成丑数，计算到第 n 个即可
 
-```python
-class Solution:
-    def nthUglyNumber(self, n):
-        ugly = [1]
-        i2 = i3 = i5 = 0
-        while len(ugly) < n:
-            while ugly[i2] * 2 <= ugly[-1]: i2 += 1
-            while ugly[i3] * 3 <= ugly[-1]: i3 += 1
-            while ugly[i5] * 5 <= ugly[-1]: i5 += 1
-            ugly.append(min(ugly[i2] * 2, ugly[i3] * 3, ugly[i5] * 5))
-        return ugly[-1]
-```
-
-```python
-class Solution:
-    ugly = sorted(2**a * 3**b * 5**c
-                  for a in range(32) for b in range(20) for c in range(14))
-    def nthUglyNumber(self, n):
-        return self.ugly[n-1]
+```cpp
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        vector<int> ugly({1});
+        int p2 = 0, p3 = 0, p5 = 0;
+        
+        for (int i = 0; i < n - 1; i++) {
+            int back = ugly.back();
+            while (ugly[p2] * 2 <= back) p2++;
+            while (ugly[p3] * 3 <= back) p3++;
+            while (ugly[p5] * 5 <= back) p5++;
+            ugly.push_back(min(min(ugly[p2] * 2, ugly[p3] * 3), ugly[p5] * 5));
+        }
+        return ugly[n - 1];
+    }
+};
 ```
 
 [返回目录](#00)
