@@ -389,7 +389,7 @@ class Solution {
 public:
     double myPow(double x, long long n) {
         double res = 1;
-        long long p = n > 0 ? n : -n;
+        long p = n > 0 ? n : -n;
         
         while (p) {
             if (p & 1)
