@@ -120,16 +120,28 @@ Explanation: The array represents the integer 4321.
 ### Python Solution
 **分析：** 从后往前找到第一位不为 9 的数字加一返回数组即可，如果为 9 ，将这一位置 0 ，继续向前寻找。如果都为 9 ，则在数组头部插入 1 。
 
-```python
-class Solution:
-    def plusOne(self, digits: List[int]) -> List[int]:
-        for i in range(len(digits)):
-            if digits[~i] < 9:
-                digits[~i] += 1
-                return digits
-            digits[~i] = 0
-        digits.insert(0, 1)
-        return digits
+```cpp
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int n = digits.size();
+        for (int i = n - 1; i >= 0; --i)
+        {
+            if (digits[i] == 9)
+            {
+                digits[i] = 0;
+            }
+            else
+            {
+                digits[i]++;
+                return digits;
+            }
+        }
+        digits[0] =1;
+        digits.push_back(0);
+        return digits;
+    }
+};
 ```
 
 [返回目录](#00)
