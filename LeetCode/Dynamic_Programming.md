@@ -853,40 +853,34 @@ exection -> execution (insert 'u')
 ### Python Solution
 **分析：** 十分经典的动态规划题目，如何理解要依靠表格来解决。可以发现 二维dp 转移是从左上角向右下角迭代的，之后不再是需求更之前的状态，所以可以简化为 一维dp 来表示。
 
-```python
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        m, n = len(word1), len(word2)
-        dp = [[0] * (n+1) for _ in range(m+1)]
-        for i in range(n+1):
-            dp[0][i] = i
-        for i in range(m+1):
-            dp[i][0] = i
-        for i in range(1, m+1):
-            for j in range(1, n+1):
-                if word1[i-1] == word2[j-1]:
-                    dp[i][j] = dp[i-1][j-1]
-                else:
-                    dp[i][j] = min(dp[i-1][j], dp[i-1][j-1], dp[i][j-1]) + 1
-        return dp[-1][-1]
-```
+```cpp
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m = word1.length(), n = word2.length();
 
-**一维的解法**
+        vector<int> dp(n+1, 0);
+        for (int i = 0; i < n + 1; i++) dp[i] = i;
 
-```python
-class Solution:
-    def minDistance(self, word1: str, word2: str) -> int:
-        m, n = len(word1), len(word2)
-        dp = list(range(n + 1))
-        for i in range(m):
-            new = [i + 1]
-            for j in range(n):
-                if word1[i] == word2[j]:
-                    new.append(dp[j])
-                else:
-                    new.append(1 + min(dp[j+1], dp[j],new[-1]))
-            dp = new
-        return dp[-1]
+        int prev, cur;
+        for (int i = 0; i < m; i++) {
+            prev = dp[0]++;
+
+            for (int j = 0; j < n; j++) {
+                cur = dp[j+1];
+
+                if (word1[i] == word2[j]) {
+                    dp[j+1] = prev;
+                } else {
+                    dp[j+1] = 1 + min(prev, min(dp[j], dp[j+1]));
+                }
+
+                prev = cur;
+            }
+        }
+        return dp[n];
+    }
+};
 ```
 
 [返回目录](#00)
