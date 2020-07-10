@@ -998,38 +998,48 @@ Output:
 **分析：** 利用栈辅助来进行赋值。
 
 ```cpp
-"""
-# Definition for a Node.
-class Node:
-    def __init__(self, val, prev, next, child):
-        self.val = val
-        self.prev = prev
-        self.next = next
-        self.child = child
-"""
-class Solution:
-    def flatten(self, head: 'Node') -> 'Node':
-        if not head:
-            return  
-        dummy = Node(0,None,head,None)
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* prev;
+    Node* next;
+    Node* child;
+};
+*/
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        if (!head) return head;
 
-        stack = [head]
-        prev = dummy
+        Node* dummy = new Node(0, nullptr, head, nullptr);
+        auto prev = dummy;
 
-        while stack:
-            root = stack.pop()
-            root.prev = prev
-            prev.next = root
-            if root.next:
-                stack.append(root.next)
-                root.next = None
-            if root.child:
-                stack.append(root.child)
-                root.child = None
-            prev = root        
+        stack<Node*> stk({head});
+        while (!stk.empty()) {
+            auto root = stk.top();
+            stk.pop();
+            root->prev = prev;
+            prev->next = root;
 
-        dummy.next.prev = None
-        return dummy.next
+            if (root->next) {
+                stk.push(root->next);
+                root->next = nullptr;
+            }
+
+            if (root->child) {
+                stk.push(root->child);
+                root->child = nullptr;
+            }
+
+            prev = root;
+        }
+
+        dummy->next->prev = nullptr;
+        return dummy->next;
+    }
+};
 ```
 
 [返回目录](#00)
