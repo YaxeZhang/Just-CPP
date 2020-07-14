@@ -240,22 +240,20 @@ The minimum path sum from top to bottom is 11 (i.e., 2 + 3 + 5 + 1 = 11).
 ### Python Solution
 **分析：** 从低向上找到更小的值合并到最开始的一个元素。
 
-```python
-class Solution(object):
-    def minimumTotal(self, triangle):
-        dp = triangle[-1][:]
-        for i in range(len(triangle)-2, -1, -1):
-            for j in range(i+1):
-                dp[j] = min(dp[j], dp[j+1]) + triangle[i][j]
-        return dp[0]
-```
+```cpp
+class Solution {
+public:
+    int minimumTotal(vector<vector<int>>& triangle) {
+        int n = triangle.size();
+        vector<int> dp(triangle[n - 1]);
 
-**写成一行的形式：**
+        for (int i = n - 2; i >= 0; i--)
+            for (int j = 0; j <= i; j++)
+                dp[j] = triangle[i][j] + min(dp[j], dp[j + 1]);
 
-```python
-class Solution(object):
-    def minimumTotal(self, triangle):
-        return reduce(lambda a, b:[min(a[i], a[i+1])+n for i, n in enumerate(b)], triangle[::-1])[0]
+        return dp[0];
+    }
+};
 ```
 
 [返回目录](#00)
