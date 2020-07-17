@@ -664,17 +664,22 @@ Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-
 
 **一维的解法**
 
-```python
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        hold1 = hold2 = float('-inf')
-        sold1 = sold2 = 0
-        for v in prices:
-            sold2 = max(sold2, hold2 + v)
-            hold2 = max(hold2, sold1 - v)
-            sold1 = max(sold1, hold1 + v)
-            hold1 = max(hold1, -v)
-        return  sold2
+```cpp
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int has1 = INT_MIN, has2 = INT_MIN;
+        int sld1 = 0, sld2 = 0;
+
+        for (auto& p: prices) {
+            sld2 = max(sld2, has2 + p);
+            has2 = max(has2, sld1 - p);
+            sld1 = max(sld1, has1 + p);
+            has1 = max(has1, -p);
+        }
+        return sld2;
+    }
+};
 ```
 
 [返回目录](#00)
