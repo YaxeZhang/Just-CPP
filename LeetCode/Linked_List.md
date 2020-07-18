@@ -3,7 +3,7 @@
  - [206  Reverse Linked List](#206--reverse-linked-list)
  - [141  Linked List Cycle](#141--linked-list-cycle)
  - [876  Middle of the Linked List](#876--middle-of-the-linked-list)
- - [24     Swap Nodes in Pairs](#24---swap-nodes-in-pairs)
+ - [24   Swap Nodes in Pairs](#24---swap-nodes-in-pairs)
  - [328  Odd Even Linked List](#328--odd-even-linked-list)
  - [92   Reverse Linked List II](#92---reverse-linked-list-ii)
  - [237  Delete Node in a Linked List](#237--delete-node-in-a-linked-list)

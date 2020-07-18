@@ -560,14 +560,18 @@ class Solution:
         return profit
 ```
 
-```python
-class Solution:
-    def maxProfit(self, prices):
-        min_p, max_v = 1 << 33, 0
-        for i in range(len(prices)):
-            min_p = min(min_p, prices[i])
-            max_v = max(max_v, prices[i] - min_p)
-        return max_v
+```cpp
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int min_p = INT_MAX, res = 0;
+        for (auto& p: prices) {
+            min_p = min(min_p, p);
+            res = max(res, p - min_p);
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
