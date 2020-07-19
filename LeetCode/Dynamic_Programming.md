@@ -610,31 +610,20 @@ Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-
 ### Python Solution
 **分析：** 两种解法：1. 动态规划的解法。 2. 贪心的解法，因为不限制买卖次数，所以我们只要后一天比前一天价格高，我们就在答案里加上差值，可以看作我们前一天买了今天买了，如果明天的比今天还高也没有关系，今天再买入、明天卖掉的方案和昨天买明天卖的方案是等价的。
 
-```python
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        n = len(prices)
-        dp, j = [0] * n, n-1
-        for i in range(n-2, -1, -1):
-            if prices[i] > prices[i+1]:
-                j = i
-            dp[i] = dp[i+1] if i == j else prices[j] - prices[i] + dp[j]
-        return dp[0] if dp else 0
-```
-
-```python
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        res = 0
-        for i in range(1, len(prices)):
-            if prices[i] > prices[i-1]:
-                res += prices[i] - prices[i-1]
-        return res
-
-# 可以简化为：
-class Solution:
-    def maxProfit(self, prices: List[int]) -> int:
-        return sum(max(b-a,0)for a,b in zip(prices,prices[1:]))
+```cpp
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int res = 0, diff;
+        for (int i = 1; i < prices.size(); i++) {
+            diff = prices[i] - prices[i-1];
+            if (diff > 0) {
+                res += diff;
+            }
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
