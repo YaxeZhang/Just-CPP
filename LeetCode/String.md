@@ -89,19 +89,40 @@ Output: -1
 ---
 
 ### Python Solution
-**分析：** 两种方法，一种是普通的方法但是已经优化，一种是马拉车算法。
+**分析：** KMP算法的实现
 
-```python
-class Solution:
-    def strStr(self, haystack: str, needle: str) -> int:
-        for i in range(len(haystack) - len(needle)+1):
-            if haystack[i:i+len(needle)] == needle:
-                return i
-        return -1
-```
+```cpp
+class Solution {
+public:
+    int strStr(string haystack, string needle) {
+        int m = haystack.length(), n = needle.length();
+        if (!n) return 0;
+        if (n > m) {
+            return -1;
+        }
+        return kmp(haystack, needle);
+    }
 
-```python
-# TODO:
+private:
+    int kmp(const string& s, const string& t) {
+        int m = s.length(), n = t.length();
+
+        int next[n], j = next[0] = -1;
+        for (int i = 1; i < n; i++) {
+            while (j > -1 && t[i] != t[j+1]) j = next[j];
+            if (t[i] == t[j+1]) j++;
+            next[i] = j;
+        }
+
+        j = -1;
+        for (int i = 0; i < m ;i ++) {
+            while (j > -1 && s[i] != t[j+1]) j = next[j];
+            if (s[i] == t[j+1]) j++;
+            if (j == n - 1) return i - j;
+        }
+        return -1;
+    }
+};
 ```
 
 [返回目录](#00)
