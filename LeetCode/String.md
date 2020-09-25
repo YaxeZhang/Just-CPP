@@ -537,13 +537,29 @@ Output: "9534330"
 ### Python Solution
 **分析：** 有点冒泡排序的意思，比较 str(a)+str(b) < ? > str(b)+str(a) 那种大，来排序。
 
-```python
-class Solution:
-    def largestNumber(self, nums: List[int]) -> str:
-        if set(nums) == {0}: return "0"
-        return "".join(sorted(map(str,nums),key = lambda x: x*3, reverse = True))
+```cpp
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        int n = nums.size();
 
-# 但这个 '3' 不科学，应该改为 len(str(max(nums))) - len(str(min(nums))) + 1
+        vector<string> tmp(n);
+        for (int i = 0; i < n; i++)
+            tmp[i] = to_string(nums[i]);
+
+        sort(tmp.begin(), tmp.end(), [&](auto& x, auto&y) {
+            return x + y > y + x;
+        });
+
+        if (tmp[0] == "0")
+            return "0";
+
+        string res = "";
+        for (auto& t: tmp) res += t;
+
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
