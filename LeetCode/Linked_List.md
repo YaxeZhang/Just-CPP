@@ -1570,22 +1570,30 @@ Output: [7,9,9,9,0,5,0,0]
 2.Use list to save the maximum value that occurred before.
 
 ```cpp
-class Solution:
-    def nextLargerNodes(self, head: ListNode) -> List[int]:
-        if not head:
-            return None
-        p, tmp, stack = head, [], []
-        while p:
-            tmp.append(p.val)
-            p = p.next
-        res = [0] * len(tmp)
-        for i in range(len(tmp)):
-            while stack and stack[-1][1] < tmp[i]:
-                idx, _ = stack.pop()
-                res[idx] = tmp[i]
-            stack.append((i, tmp[i]))
+class Solution {
+public:
+    vector<int> nextLargerNodes(ListNode* head) {
+        int n = 0, i = 0;
+        for (auto c = head; c; c = c->next) n++;
 
-        return res
+        vector<int> res(n);
+
+        stack<int> stk;
+        for (auto c = head; c; c = c->next) {
+            while (!stk.empty() && -res[stk.top()] < c->val) {
+                res[stk.top()] = c->val;
+                stk.pop();
+            }
+            stk.push(i);
+            res[i++] = -c->val;
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (res[i] < 0) res[i] = 0;
+        }
+        return res;
+    }
+};
 ```
 
 [返回目录](#00)
